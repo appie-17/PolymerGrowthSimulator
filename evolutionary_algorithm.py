@@ -7,11 +7,11 @@ class EvolutionaryAlgorithm:
     def __init__(self, pop_size, fitness_function, clipping_function=None, graph=False):
         # time_sim, number_of_molecules, monomer_pool, p_growth, p_death, p_dead_react,
         # l_exponent, d_exponent, l_naked, kill_spawns_new
-        init = np.array([[1000,    100000,     10000000,   0.5,
-                            0.5,    0.5,    0.2,    0.2,    0.2,    1]])
+        init = np.array([[1000,    100000,     1000000000,   0.8,
+                            0.00005,    0.2,    0.23,    0.23,    0.5,    1]])
 
-        scale = np.array([100,     10000,      1000000,    0.05,
-                            0.05,   0.05,   0.02,   0.02,   0.02,   0.1])
+        scale = np.array([0,     0,      1000,    0.05,
+                            0.05,   0.000005,   0.02,   0.02,   0.02,   0.1])
 
         # init = np.random.normal(scale=10, size=pop_size)
         # scale = np.abs(init * 0.2)
@@ -41,9 +41,10 @@ class EvolutionaryAlgorithm:
         self._log(message, 3)
 
     def run(self, iterations: int):
-
+        
         fitnessess = np.zeros((iterations, self.pop_size))
         for i in range(iterations):
+            
             self.log("#### iteration {} ####".format(i))
             fitness = self.evaluation()
             fitnessess[i] = fitness
@@ -51,11 +52,13 @@ class EvolutionaryAlgorithm:
             self.reproduction()
             self.mutation()
 
-        if self.graph:
-            plt.ion()
-            averages = np.average(fitnessess, 1)
-            plot = plt.plot(averages)
-            plt.pause(-1)
+            if self.graph:
+                plt.figure(2)
+                plt.subplot(111)                                
+                plt.cla()
+                averages = np.average(fitnessess, 1)
+                plt.plot(averages[:i+1])                
+                plt.pause(1e-40)
 
         return fitnessess
 
@@ -124,17 +127,3 @@ def rosenbrock(X):
 
 def test_fitness(X):
     return np.random.random()
-
-
-if __name__ == '__main__':
-    from eval import process_arguments
-    from simulation import polymer
-    from data_processing import comparison
-    from simulation import polymer
-
-    diff = comparison("polymer_20k.xlsx", polymer, )
-
-    alg = EvolutionaryAlgorithm(10, diff.get_difference, process_arguments, True)
-    alg.log_level = 2
-    print(alg.run(200))
-    print(alg.population)

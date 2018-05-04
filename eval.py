@@ -1,9 +1,8 @@
 from simulation import polymer
 from hill_climbing import hill_climbing
-from data_processing import comparison
+from data_processing import minMaxNorm, comparison
+from evolutionary_algorithm import EvolutionaryAlgorithm
 import numpy as np
-
-diff =  comparison('polymer_20k.xlsx', polymer)
 
 def non_neg(x):
     return np.sqrt(x**2)
@@ -53,4 +52,9 @@ def process_arguments(arguments):
     return arguments
 
 if __name__ == '__main__':
-    hill_climbing(diff.get_difference, process_arguments)
+    diff =  minMaxNorm('polymer_20k.xlsx', polymer,plot_iter=10)
+    # hill_climbing(diff.get_difference, process_arguments)
+    alg = EvolutionaryAlgorithm(10, diff.get_difference, process_arguments, True)
+    alg.log_level = 2
+    print(alg.run(100))
+    print(alg.population)
