@@ -23,7 +23,7 @@ def hill_climbing(diff_func, arg_func):
     while True:
         iter+=1
         print("##### iter", iter, "#####")
-        before = diff_func(arg_func(current_point))
+        before = diff_func(arg_func(current_point), plot=True)
         for x in range(len(current_point)):
             print("{}:{}; ".format(param_names[x], current_point[x]))
         print("solution cost:", before)
@@ -34,7 +34,7 @@ def hill_climbing(diff_func, arg_func):
             best_score = 100000
             for j in range(5):        # try each of 5 candidate locations
                 current_point[i] = current_point[i] + step_size[i] * candidate[j]
-                temp = diff_func(arg_func(current_point))
+                temp = diff_func(arg_func(current_point), plot=True)
                 print("{}: val: {}, cost: {}".format(j, current_point[i], temp))
                 current_point[i] = current_point[i] - step_size[i] * candidate[j]
 

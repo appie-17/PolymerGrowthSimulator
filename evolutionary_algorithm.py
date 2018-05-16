@@ -7,19 +7,19 @@ class EvolutionaryAlgorithm:
     def __init__(self, pop_size, fitness_function, clipping_function=None, graph=False):
         # time_sim, number_of_molecules, monomer_pool, p_growth, p_death, p_dead_react,
         # l_exponent, d_exponent, l_naked, kill_spawns_new
-        init = np.array([[1000,    100000,     1000000000,   0.8,
-                            0.00005,    0.2,    0.23,    0.23,    0.5,    1]])
+        init = np.array([1000,    100000,     10000000,   0.5,
+                            0.000005,    0.2,    0.23,    0.23,    0.5,    1])
+        # init = np.array([1000, 100000,     31600000,   0.2,
+    # 0.0000806, 0.5, 0.67, 0.67, 1, 1])
+        # self.scale = np.array([0,     0,      1000,    0.05,
+        #                     0.005,   0.05,   0.02,   0.02,   0.02,   0.1])
+        self.scale = init*0.5
 
-        scale = np.array([0,     0,      1000,    0.05,
-                            0.05,   0.000005,   0.02,   0.02,   0.02,   0.1])
-
-        # init = np.random.normal(scale=10, size=pop_size)
-        # scale = np.abs(init * 0.2)
-
-        self.population = (np.random.random((pop_size, 10)) - 0.5) * scale + init
+    
+        self.population = (np.random.random((pop_size, 10)) - 0.5) * self.scale + init
         self.fit_func = fitness_function
         self.pop_size = pop_size
-        self.scale = scale
+        # self.scale = scale
         self.clip_func = clipping_function
         self.graph = graph
         self.log_level = 0
@@ -63,6 +63,7 @@ class EvolutionaryAlgorithm:
         return fitnessess
 
     def evaluation(self):
+        
         size = len(self.population)
         fitness = np.zeros(size)
         for i in range(size):
@@ -73,10 +74,13 @@ class EvolutionaryAlgorithm:
         return fitness
 
     def selection(self, fitness):
-        n = 3
+        n = 8
         order = np.argsort(fitness)
         order = order[:n]
+        print(self.population[order[-1]])
+        self.fit_func(self.population[order[-1]], plot=True)
         self.population = self.population[order]
+
 
     def reproduction(self):
         size = len(self.population)
@@ -108,22 +112,12 @@ class EvolutionaryAlgorithm:
         # mutation
         mutation_rate = 0.2
         x = np.random.random(self.pop_size)
-        mask = np.argwhere(x < mutation_rate)
-        cols = np.random.randint(0, 10, len(mask))
+        mask = np.argwhere(x < mutation_rate)        
+        cols = np.random.choice(10,len(mask),replace=True)
         mutations = np.random.normal(scale=self.scale[cols])
+      
         self.population[mask, cols] = self.population[mask, cols] + mutations
         if self.clip_func is not None:
             self.clip()
 
 
-def rosenbrock(X):
-    _a = 0
-    _b = 10
-    s = 0
-    for i in range(len(X) - 1):
-        s = s + _b * pow(X[i+1] - pow(X[i], 2), 2) + pow(_a-X[i], 2)
-    return s
-
-
-def test_fitness(X):
-    return np.random.random()
