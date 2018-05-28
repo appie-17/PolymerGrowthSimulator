@@ -37,11 +37,11 @@ def clip(ar):
     #  p_dead_react --> between 0 and 1 + non-negative
     ar[5] = prob(non_neg(ar[5]))
     #  l_exponent --> non-negative
-    ar[6] = non_neg(ar[6])
+    ar[6] = prob(non_neg(ar[6]))
     #  d_exponent --> non-negative
-    ar[7] = non_neg(ar[7])
+    ar[7] = prob(non_neg(ar[7]))
     #  l_naked --> lol
-    ar[8] = non_neg(ar[8])
+    ar[8] = prob(non_neg(ar[8]))
     #  kill_spawns_new --> boolean
     ar[9] = 1
     
@@ -53,10 +53,10 @@ def process_arguments(arguments):
     return arguments
 
 if __name__ == '__main__':
-    # diff =  minMaxNorm('polymer_20k.xlsx', polymer,plot_iter=10)
-    diff =  medianFoldNorm('polymer_20k.xlsx', polymer)
+    # diff =  minMaxNorm('polymer_20k.xlsx', polymer)
+    diff =  medianFoldNorm('polymer_30k.xlsx', polymer)
     # hill_climbing(diff.get_difference, process_arguments)
-    alg = EvolutionaryAlgorithm(50, diff.get_difference, process_arguments, graph=True)
+    alg = EvolutionaryAlgorithm(20, diff.get_difference, process_arguments, graph=True)
     alg.log_level = 2
     print(alg.run(100))
     print(alg.population)

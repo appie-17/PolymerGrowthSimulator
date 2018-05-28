@@ -17,9 +17,9 @@ class Comparison:
         # self.exp_chainlen = np.concatenate((np.arange(1, self.exp_cl_min), self.exp_chainlen))
         self.exp_cl_val = dict(zip(self.exp_chainlen, self.exp_values))
         self.exp_cl_val.update(zip(np.arange(1, self.exp_cl_min + 1), np.zeros(self.exp_cl_min)))
-        self.exp_val = np.array(list(self.exp_cl_val.values()))
+        self.exp_val = np.array(list(self.exp_cl_val.values()))        
         self.exp_val = np.concatenate((np.zeros(self.exp_cl_min - 1), self.exp_val))        
-                	
+        self.sigma = [1,3,5,5,5]
         self.fig, self.axes = plt.subplots(ncols=2)
 
     def get_difference(self):
@@ -97,18 +97,18 @@ class medianFoldNorm(Comparison) :
 			exp_val = np.concatenate((self.exp_val, np.zeros(abs(diff))))
 			foldNorm = np.divide(exp_val,sim_val, out=np.zeros(sim_val.shape), where=sim_val!=0)
 			median_foldNorm = np.median(foldNorm[foldNorm.nonzero()])
-			exp_norm = exp_val/median_foldNorm
+			sim_norm = sim_val*median_foldNorm
 			
 		elif diff <= 0:
 			sim_val = np.concatenate((sim_val, np.zeros(abs(diff))))
 			exp_val = self.exp_val					
 			foldNorm = np.divide(sim_val,exp_val, out=np.zeros(exp_val.shape), where=exp_val!=0)
 			median_foldNorm = np.median(foldNorm[foldNorm.nonzero()])								
-			exp_norm = exp_val*median_foldNorm
+			sim_norm = sim_val/median_foldNorm
 			
-		exp_norm_sum = np.sum(exp_norm)
-		sim_norm = sim_val
 		sim_norm_sum = np.sum(sim_norm)
+		exp_norm = exp_val
+		exp_norm_sum = np.sum(exp_norm)
 		
 		# Plot difference after certain number of parameter iterations
 		if plot:			
@@ -120,14 +120,24 @@ class medianFoldNorm(Comparison) :
 			self.axes[1].bar(np.arange(sim_norm.shape[0]), sim_norm)
 			self.axes[1].set_title('Simulation')
 			plt.pause(1e-40)		
-		# Compute difference by l1- or l2-norm
-		if exp_norm_sum > sim_norm_sum:
-			difference = np.sum(np.sqrt((exp_norm - sim_norm)**2)) #/ (sim_norm_sum / exp_norm_sum) ** 2
-		# difference = np.sum(np.sqrt((exp_norm - sim_norm)**2))/(sim_norm_sum/exp_norm_sum)**2
-		#print(difference)
 
-		else:
-			difference = np.sum(np.sqrt((exp_norm - sim_norm)**2)) #/ (exp_norm_sum / sim_norm_sum) ** 2
+		#Cost function based on weights by standard deviation
+		exp_sd, exp_mean = np.std(exp_norm), np.mean(exp_norm)
+		difference = 0
+		for i in range(len(self.sigma)):
+			indices = np.where((exp_norm>exp_mean-exp_sd*i)&(exp_norm<exp_mean+exp_sd*i))
+			difference += np.sum(abs((exp_norm[indices] - sim_norm[indices]))**(1/self.sigma[i]))
+
+
+
+		# Compute difference by l1- or l2-norm
+		# if exp_norm_sum > sim_norm_sum:
+		# 	difference = np.sum(abs((exp_norm - sim_norm)**2)) / (sim_norm_sum / exp_norm_sum)
+		# # difference = np.sum(np.sqrt((exp_norm - sim_norm)**2))/(sim_norm_sum/exp_norm_sum)**2
+		# #print(difference)
+
+		# else:
+		# 	difference = np.sum(abs((exp_norm - sim_norm)**2)) / (exp_norm_sum / sim_norm_sum)
 		# difference = np.sum(np.sqrt((exp_norm - sim_norm)**2))/(exp_norm_sum/sim_norm_sum)**2
 		#print(difference)
 

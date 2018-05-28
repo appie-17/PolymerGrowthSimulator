@@ -7,7 +7,8 @@ def hill_climbing(diff_func, arg_func):
     epsilon = 0.00002
     dims = 10
     # initial_step_sizes = np.ones(dims) * 0.2
-    current_point = np.array([10000, 100000, 10000000, 0.5, 0.5, 0.5, 0.2,0.2, 0.2, 1])   # the zero-magnitude vector is common
+    current_point = np.array([1000, 100000,     31600000,   0.2,
+    0.0000806, 0.5, 0.67, 0.67, 1, 1])   # the zero-magnitude vector is common
     initial_step_sizes = current_point/10
     some_acceleration = 5.0
 

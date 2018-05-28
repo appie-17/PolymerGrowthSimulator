@@ -7,8 +7,9 @@ class EvolutionaryAlgorithm:
     def __init__(self, pop_size, fitness_function, clipping_function=None, graph=False):
         # time_sim, number_of_molecules, monomer_pool, p_growth, p_death, p_dead_react,
         # l_exponent, d_exponent, l_naked, kill_spawns_new
-        init = np.array([1000,    100000,     10000000,   0.5,
+        init = np.array([1000,    100000,     10000000,   0.8,
                             0.000005,    0.2,    0.23,    0.23,    0.5,    1])
+        # init = np.array([10000, 100000, 10000000, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 1])
         # init = np.array([1000, 100000,     31600000,   0.2,
     # 0.0000806, 0.5, 0.67, 0.67, 1, 1])
         # self.scale = np.array([0,     0,      1000,    0.05,
