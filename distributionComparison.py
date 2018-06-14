@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 """
 Comparison class is the parent class for any normalization method to be implemented.
-Inheritance the 'Comparison' class to load and preprocess experimental datasets from a 2 column excel file,
+Inherit the 'Comparison' class to load and preprocess experimental datasets from a 2 column excel file,
 First column is the molar_mass (g/mol) and second column the linear differential molar mass.
 Each normalization method is forced to implement the abstract method 'costFunction', which returns a final cost
 when comparing two distributions.

@@ -1,7 +1,7 @@
 from simulation import polymer
-from hill_climbing import hill_climbing
-from data_processing import minMaxNorm, medianFoldNorm, Comparison
-from evolutionary_algorithm import EvolutionaryAlgorithm
+from hillClimbing import hillClimbing
+from distributionComparison import minMaxNorm, medianFoldNorm, distributionComparison
+from evolutionaryAlgorithm import EvolutionaryAlgorithm
 import numpy as np
 
 def non_neg(x):
@@ -53,10 +53,20 @@ def process_arguments(arguments):
     return arguments
 
 if __name__ == '__main__':
-    # diff =  minMaxNorm('polymer_20k.xlsx', polymer)
-    diff =  medianFoldNorm('polymer_30k.xlsx', polymer)
-    # hill_climbing(diff.get_difference, process_arguments)
-    alg = EvolutionaryAlgorithm(20, diff.get_difference, process_arguments, graph=True)
+    #Compare distributions after normalizing by either minMaxNorm or medianFoldNorm. 
+    #compareDist =  minMaxNorm('polymer_20k.xlsx', polymer)
+    compareDist =  medianFoldNorm('polymer_30k.xlsx', polymer)
+    
+    #Use compare
+    # hillClimbing(compareDist.costFunction, process_arguments)
+    param_boundaries = np.array([[900,1100],[90000,110000],[3000000,32000000],
+                   [0,1],[0,0.0001],[0,1],[0,1],[0,1],[0,1],[1,1]])
+    alg = EvolutionaryAlgorithm(param_boundaries, 20, compareDist.costFunction, process_arguments, graph=True)
     alg.log_level = 2
     print(alg.run(100))
     print(alg.population)
+
+    X0 = np.array([[1000, 100000, 31600000, 0.2,
+    0.0000806, 0.5, 0.67, 0.67, 1, 1]])
+    xp,yp = bayesian_optimisation(15,compareDist.costFunction, bound,
+                        None,1,alpha=0.1,epsilon=1e-5)

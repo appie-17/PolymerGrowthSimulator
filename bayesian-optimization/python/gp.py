@@ -144,6 +144,9 @@ def bayesian_optimisation(n_iters, sample_loss, bounds, x0=None, n_pre_samples=5
         model = gp.GaussianProcessRegressor(**gp_params)
     else:
         kernel = gp.kernels.Matern()
+        # kernel = gp.kernels.RBF()
+        # kernel = gp.kernels.DotProduct(1,1)
+
         model = gp.GaussianProcessRegressor(kernel=kernel,
                                             alpha=alpha,
                                             n_restarts_optimizer=10,
