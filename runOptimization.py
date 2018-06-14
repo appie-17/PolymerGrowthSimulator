@@ -54,8 +54,8 @@ def process_arguments(arguments):
 
 if __name__ == '__main__':
     #Compare distributions after normalizing by either minMaxNorm or medianFoldNorm. 
-    #compareDist =  minMaxNorm('polymer_20k.xlsx', polymer)
-    compareDist =  medianFoldNorm('polymer_30k.xlsx', polymer)
+    #compareDist =  minMaxNorm('Data/polymer_20k.xlsx', polymer)
+    compareDist =  medianFoldNorm('Data/polymer_30k.xlsx', polymer)
     
     #Use compare
     # hillClimbing(compareDist.costFunction, process_arguments)
