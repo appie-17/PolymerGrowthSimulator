@@ -39,29 +39,42 @@ class App:
         self.label_parameters.grid(row=5, column=1)
 
         self.parameters_listbox = Listbox(frame, selectmode=SINGLE)
-        for item in ['Simulation time', 'Number of molecules', 'Monomer pool', 'Growth probability',
-                     'Death probabiity', 'Dead polymer reaction probability', 'Living length exponent',
-                     'Dead length exponent', 'Kill spawn flag']:
+        for item in ['Simulation time',
+                     'Number of molecules',
+                     'Monomer pool',
+                     'Growth probability',
+                     'Death probabiity',
+                     'Dead polymer reaction probability',
+                     'Living length exponent',
+                     'Dead length exponent',
+                     'Kill spawn flag']:
             self.parameters_listbox.insert(END, item)
         self.parameters_listbox.grid(row=7, column=1)
 
         self.parameter_value = StringVar()
-        e1 = Entry(frame, textvariable=self.parameter_value)
-        e1.grid(row=7, column=3)
+        parameter_entry = Entry(frame, textvariable=self.parameter_value)
+        parameter_entry.grid(row=7, column=3)
 
         # ----------- Evolutionary Algorithm ---------- #
         self.label_ea = Label(frame, text="Evolutionary Algorithm")
         self.label_ea.grid(row=11, column=1)
 
+        self.label_iterations = Label(frame, text="Number of iterations")
+        self.label_iterations.grid(row=12, column=1)
+
+        self.num_iterations_value = StringVar()
+        iterations_entry = Entry(frame, textvariable=self.num_iterations_value)
+        iterations_entry.grid(row=12, column=3)
+
         # ----------- Baysian Optimisation ------------ #
         self.label_bo = Label(frame, text="Baysian Optimisation")
-        self.label_bo.grid(row=11, column=5)
+        self.label_bo.grid(row=11, column=7)
 
         # ------------ Run Buttons --------------------- #
         self.button_run_ea = Button(frame, text='RUN EA', fg='green', command=self.run_ea)
         self.button_run_ea.grid(row=14, column=1)
         self.button_run_bo = Button(frame, text='RUN BO', fg='green', command=self.run_bo)
-        self.button_run_bo.grid(row=14, column=5)
+        self.button_run_bo.grid(row=14, column=7)
 
     def run_ea(self):
         return 0
