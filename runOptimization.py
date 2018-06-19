@@ -1,6 +1,6 @@
 from simulation import polymer
 from hillClimbing import hillClimbing
-from distributionComparison import minMaxNorm, medianFoldNorm, distributionComparison
+from distributionComparison import minMaxNorm, medianFoldNorm, distributionComparison, Trans
 from evolutionaryAlgorithm import EvolutionaryAlgorithm
 import numpy as np
 from gp import *
@@ -56,7 +56,7 @@ def process_arguments(arguments):
 if __name__ == '__main__':
     #Compare distributions after normalizing by either minMaxNorm or medianFoldNorm. 
     #compareDist =  minMaxNorm('Data/polymer_20k.xlsx', polymer)
-    compareDist =  medianFoldNorm('Data/polymer_30k.xlsx', polymer)
+    compareDist =  Trans('Data/polymer_30k.xlsx', polymer)
     
     #Use compare
     # hillClimbing(compareDist.costFunction, process_arguments)
@@ -71,3 +71,4 @@ if __name__ == '__main__':
     0.0000806, 0.5, 0.67, 0.67, 1, 1]])
     xp,yp = bayesian_optimisation(15,compareDist.costFunction, param_boundaries,
                         None,1,alpha=0.1,epsilon=1e-5)
+    np.savetxt(fname='testitest', X = yp)
