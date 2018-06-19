@@ -3,6 +3,7 @@ from hillClimbing import hillClimbing
 from distributionComparison import minMaxNorm, medianFoldNorm, distributionComparison
 from evolutionaryAlgorithm import EvolutionaryAlgorithm
 import numpy as np
+from gp import *
 
 def non_neg(x):
     return np.sqrt(x**2)
@@ -61,12 +62,12 @@ if __name__ == '__main__':
     # hillClimbing(compareDist.costFunction, process_arguments)
     param_boundaries = np.array([[900,1100],[90000,110000],[3000000,32000000],
                    [0,1],[0,0.0001],[0,1],[0,1],[0,1],[0,1],[1,1]])
-    alg = EvolutionaryAlgorithm(param_boundaries, 20, compareDist.costFunction, process_arguments, graph=True)
-    alg.log_level = 2
-    print(alg.run(100))
-    print(alg.population)
+    # alg = EvolutionaryAlgorithm(param_boundaries, 20, compareDist.costFunction, process_arguments, graph=True)
+    # alg.log_level = 2
+    # print(alg.run(100))
+    # print(alg.population)
 
     X0 = np.array([[1000, 100000, 31600000, 0.2,
     0.0000806, 0.5, 0.67, 0.67, 1, 1]])
-    xp,yp = bayesian_optimisation(15,compareDist.costFunction, bound,
+    xp,yp = bayesian_optimisation(15,compareDist.costFunction, param_boundaries,
                         None,1,alpha=0.1,epsilon=1e-5)
