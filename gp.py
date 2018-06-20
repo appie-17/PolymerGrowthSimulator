@@ -9,6 +9,25 @@ import sklearn.gaussian_process as gp
 from scipy.stats import norm
 from scipy.optimize import minimize
 
+def probability_improvement(x,  gaussian_process, evaluated_loss, greater_is_better=False, n_params=1):
+    eps=1
+    x_to_predict = x.reshape(-1, n_params)
+
+    mu, sigma = gaussian_process.predict(x_to_predict, return_std=True)
+    
+    if greater_is_better:
+        loss_optimum = np.max(evaluated_loss)
+    else:
+        loss_optimum = np.min(evaluated_loss)
+
+    scaling_factor = (-1) ** (not greater_is_better)
+    with np.errstate(divide='ignore'):
+        probability_improvement = scaling_factor * norm.cdf((mu-loss_optimum-eps)/
+            sigma)
+        probability_improvement[sigma == 0.0] == 0.0 
+    
+    return probability_improvement   
+
 def expected_improvement(x, gaussian_process, evaluated_loss, greater_is_better=False, n_params=1):
     """ expected_improvement
 
@@ -91,6 +110,12 @@ def sample_next_hyperparameter(acquisition_func, gaussian_process, evaluated_los
 
     return best_x
 
+def normalizeInput(x,bounds):
+    
+    x_norm = (x-bounds[:,0])/(bounds[:,1]-bounds[:,0])
+    x_norm[np.isnan(x_norm)] = 0
+    
+    return x_norm
 
 def bayesian_optimisation(n_iters, sample_loss, bounds, x0=None, n_pre_samples=5,
                           gp_params=None, random_search=False, alpha=1e-5, epsilon=1e-7):
@@ -143,6 +168,8 @@ def bayesian_optimisation(n_iters, sample_loss, bounds, x0=None, n_pre_samples=5
     if gp_params is not None:
         model = gp.GaussianProcessRegressor(**gp_params)
     else:
+        # kernel = gp.kernels.Matern(length_scale = [100,10000,10000000,1,1,1,1,1,1,1])
+        # kernel = gp.kernels.Sum(gp.kernels.Matern(),gp.kernels.Matern()) 
         kernel = gp.kernels.Matern()
         # kernel = gp.kernels.RBF()
         # kernel = gp.kernels.DotProduct(1,1)
@@ -154,19 +181,27 @@ def bayesian_optimisation(n_iters, sample_loss, bounds, x0=None, n_pre_samples=5
 
     for n in range(n_iters):
 
+        # xp = normalizeInput(xp,bounds)        
         model.fit(xp, yp)
 
         # Sample next hyperparameter
         if random_search:
             x_random = np.random.uniform(bounds[:, 0], bounds[:, 1], size=(random_search, n_params))
+            # x_random = normalizeInput(x_random,bounds)
             ei = -1 * expected_improvement(x_random, model, yp, greater_is_better=False, n_params=n_params)
+            # ei = -1 * probability_improvement(x_random, model, yp, greater_is_better=False, n_params=n_params)
             next_sample = x_random[np.argmax(ei), :]
+            # next_sample = normalizeInput(next_sample, bounds)
         else:
             next_sample = sample_next_hyperparameter(expected_improvement, model, yp, greater_is_better=False, bounds=bounds, n_restarts=100)
+            # next_sample = normalizeInput(next_sample, bounds)
+            # next_sample = sample_next_hyperparameter(probability_improvement, model, yp, greater_is_better=False, bounds=bounds, n_restarts=100)
 
         # Duplicates will break the GP. In case of a duplicate, we will randomly sample a next query point.
-        if np.any(np.abs(next_sample - xp) <= epsilon):
+        if np.all(np.abs(next_sample - xp) <= epsilon):
+            print('duplicate')
             next_sample = np.random.uniform(bounds[:, 0], bounds[:, 1], bounds.shape[0])
+            # next_sample = normalizeInput(next_sample, bounds)
 
         # Sample loss for new set of parameters
         cv_score = sample_loss(next_sample)
@@ -179,4 +214,4 @@ def bayesian_optimisation(n_iters, sample_loss, bounds, x0=None, n_pre_samples=5
         xp = np.array(x_list)
         yp = np.array(y_list)
 
-    return xp, yp
+    return xp, yp, model

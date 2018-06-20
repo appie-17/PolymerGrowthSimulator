@@ -1,6 +1,5 @@
 import numpy as np
 
-
 def hillClimbing(diff_func, arg_func):
     param_names = ["time_sim","number_of_molecules", "monomer_pool", "p_growth", "p_death", "p_dead_react", "l_exponent", "d_exponent", "l_naked", "kill_spawns_new"]
     epsilon = 0.00002

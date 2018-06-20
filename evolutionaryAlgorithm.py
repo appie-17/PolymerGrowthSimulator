@@ -5,7 +5,6 @@ from multiprocessing import Pool
 
 p = Pool(4)
 
-
 def _async_evaluate(population, fit_func):
     # Evaluate individual i
     # print(("Evaluating individual {}: {}".format(i, population[i])))

@@ -5,6 +5,14 @@ import time
 #Set seed for 'Mersenne Twister' rng
 # np.random.seed(2)
 def polymer(time_sim, number_of_molecules, monomer_pool, p_growth, p_death, p_dead_react, l_exponent, d_exponent, l_naked, kill_spawns_new, video=0, coloured=1, final_plot=0):    
+    time_sim = 1000
+    number_of_molecules = 100000
+    monomer_pool = 32000000
+    p_growth = 0.2
+    p_death = 0.0000806
+    l_exponent = 0.67
+    d_exponent = 0.67
+    l_naked = 1.0
     # this function simulates the growth of polymers it takes;
     # number_of_molecules - the number of starting chains (length 1)
     # time_sim - the number of timesteps the simulation runs for

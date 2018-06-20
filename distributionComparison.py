@@ -147,6 +147,5 @@ class medianFoldNorm(distributionComparison) :
 		# cost = np.sum(np.sqrt((exp_norm - sim_norm)**2))/(exp_norm_sum/sim_norm_sum)**2
 		#print(cost)
 		
-
 		return cost
 		# dead, living, coupled = [(180+99.13*x) for x in sim_data]	
