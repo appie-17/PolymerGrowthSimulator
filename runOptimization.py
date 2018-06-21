@@ -3,7 +3,7 @@ from hillClimbing import hillClimbing
 from distributionComparison import minMaxNorm, medianFoldNorm, distributionComparison, Trans
 from evolutionaryAlgorithm import EvolutionaryAlgorithm
 import numpy as np
-from gp import *
+from bayesianOptimization import *
 
 def non_neg(x):
     return np.sqrt(x**2)
@@ -69,6 +69,6 @@ if __name__ == '__main__':
 
     X0 = np.array([[1000, 100000, 31600000, 0.2,
     0.0000806, 0.5, 0.67, 0.67, 1, 1]])
-    xp,yp = bayesian_optimisation(15,compareDist.costFunction, param_boundaries,
-                        None,1,alpha=0.1,epsilon=1e-5)
+    xp, yp, model = bayesian_optimisation(n_iters=15,costFunction=compareDist.costFunction, bounds=param_boundaries, n_params=10,
+                        x0=None, n_pre_samples=10,gp_params=None, alpha=0.1,acquisitionFunction='probability_improvement', epsilon=1e-5)
     np.savetxt(fname='testitest', X = yp)
