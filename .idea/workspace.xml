@@ -5,16 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a67d148-bbf6-41c7-b481-b280e8999adf" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/helper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/PolymerGrowthSimulator.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PolymerGrowthSimulator.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bayesianOptimization.py" beforeDir="false" afterPath="$PROJECT_DIR$/bayesianOptimization.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/distributionComparison.py" beforeDir="false" afterPath="$PROJECT_DIR$/distributionComparison.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/evolutionaryAlgorithm.py" beforeDir="false" afterPath="$PROJECT_DIR$/evolutionaryAlgorithm.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/runOptimization.py" beforeDir="false" afterPath="$PROJECT_DIR$/runOptimization.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testitest" beforeDir="false" afterPath="$PROJECT_DIR$/testitest" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -25,11 +16,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="runOptimization.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="runOptimization.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/runOptimization.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="23" column="52" selection-start-line="23" selection-start-column="52" selection-end-line="23" selection-end-column="52" />
+            <state relative-caret-position="432">
+              <caret line="27" column="20" lean-forward="true" selection-start-line="27" selection-start-column="20" selection-end-line="27" selection-end-column="20" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -54,7 +45,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="distributionComparison.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="distributionComparison.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/distributionComparison.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="3330">
@@ -78,7 +69,7 @@
       <file leaf-file-name="acquisitionFunction.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/acquisitionFunction.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1152">
+            <state relative-caret-position="-573">
               <caret line="64" column="53" lean-forward="true" selection-start-line="64" selection-start-column="53" selection-end-line="64" selection-end-column="53" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
@@ -98,8 +89,8 @@
         <option value="$PROJECT_DIR$/evolutionaryAlgorithm.py" />
         <option value="$PROJECT_DIR$/bayesianOptimization.py" />
         <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
-        <option value="$PROJECT_DIR$/runOptimization.py" />
         <option value="$PROJECT_DIR$/distributionComparison.py" />
+        <option value="$PROJECT_DIR$/runOptimization.py" />
       </list>
     </option>
   </component>
@@ -187,6 +178,14 @@
       <option name="presentableId" value="Default" />
       <updated>1529602977298</updated>
     </task>
+    <task id="LOCAL-00001" summary="Cleanup, refactoring">
+      <created>1529610122466</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1529610122466</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -215,28 +214,15 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Cleanup, refactoring" />
+    <option name="LAST_COMMIT_MESSAGE" value="Cleanup, refactoring" />
+  </component>
   <component name="editorHistoryManager">
     <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/site-packages/matplotlib/cbook/deprecation.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="154">
           <caret line="106" selection-start-line="106" selection-end-line="106" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/acquisitionFunction.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1152">
-          <caret line="64" column="53" lean-forward="true" selection-start-line="64" selection-start-column="53" selection-end-line="64" selection-end-column="53" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bayesianOptimization.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -260,10 +246,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/runOptimization.py">
+    <entry file="file://$PROJECT_DIR$/bayesianOptimization.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="23" column="52" selection-start-line="23" selection-start-column="52" selection-end-line="23" selection-end-column="52" />
+        <state relative-caret-position="126">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/acquisitionFunction.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-573">
+          <caret line="64" column="53" lean-forward="true" selection-start-line="64" selection-start-column="53" selection-end-line="64" selection-end-column="53" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -274,6 +267,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3330">
           <caret line="185" column="52" selection-start-line="185" selection-start-column="52" selection-end-line="185" selection-end-column="52" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/runOptimization.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="27" column="20" lean-forward="true" selection-start-line="27" selection-start-column="20" selection-end-line="27" selection-end-column="20" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
