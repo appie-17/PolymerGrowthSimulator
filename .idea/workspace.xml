@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="SCOPE_TYPE" value="3" />
+  </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="9f643cf4-1aac-41de-bd65-1c215d894fd0" name="Default" comment="">
       <change type="DELETED" beforePath="$PROJECT_DIR$/testitest" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
@@ -8,6 +12,15 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gp.py" afterPath="$PROJECT_DIR$/gp.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/runOptimization.py" afterPath="$PROJECT_DIR$/runOptimization.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/simulation.py" afterPath="$PROJECT_DIR$/simulation.py" />
+=======
+    <list default="true" id="72e8c3fe-cbf4-4fa3-bd78-af15eeb9f9c5" name="Default" comment="Test compability">
+      <change afterPath="$PROJECT_DIR$/acquisitionFunction.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bayesianOptimization.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gp.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/runOptimization.py" beforeDir="false" afterPath="$PROJECT_DIR$/runOptimization.py" afterDir="false" />
+>>>>>>> 040d0072ca2b426c7b9ff7d77dcf9bef3a4eacb1
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -21,8 +34,13 @@
       <file leaf-file-name="runOptimization.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/runOptimization.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="57">
               <caret line="59" column="4" lean-forward="false" selection-start-line="59" selection-start-column="4" selection-end-line="59" selection-end-column="4" />
+=======
+            <state relative-caret-position="191">
+              <caret line="60" column="16" lean-forward="true" selection-start-line="60" selection-start-column="16" selection-end-line="60" selection-end-column="16" />
+>>>>>>> 040d0072ca2b426c7b9ff7d77dcf9bef3a4eacb1
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
               </folding>
@@ -30,18 +48,27 @@
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file leaf-file-name="distributionComparison.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/distributionComparison.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-42">
               <caret line="82" column="36" lean-forward="true" selection-start-line="82" selection-start-column="36" selection-end-line="82" selection-end-column="36" />
+=======
+      <file leaf-file-name="bayesianOptimization.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/bayesianOptimization.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="173">
+              <caret line="55" column="47" lean-forward="true" selection-start-line="55" selection-start-column="47" selection-end-line="55" selection-end-column="47" />
+>>>>>>> 040d0072ca2b426c7b9ff7d77dcf9bef3a4eacb1
               <folding>
-                <element signature="e#0#18#0" expanded="true" />
+                <element signature="e#75#93#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file leaf-file-name="simulation.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/simulation.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -60,6 +87,16 @@
             <state relative-caret-position="246">
               <caret line="206" column="52" lean-forward="true" selection-start-line="206" selection-start-column="52" selection-end-line="206" selection-end-column="52" />
               <folding />
+=======
+      <file leaf-file-name="acquisitionFunction.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/acquisitionFunction.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="353">
+              <caret line="119" column="22" lean-forward="true" selection-start-line="119" selection-start-column="22" selection-end-line="119" selection-end-column="22" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
+>>>>>>> 040d0072ca2b426c7b9ff7d77dcf9bef3a4eacb1
             </state>
           </provider>
         </entry>
@@ -72,40 +109,82 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/simulation.py" />
         <option value="$PROJECT_DIR$/gp.py" />
+=======
+        <option value="$PROJECT_DIR$/gp.py" />
+        <option value="$PROJECT_DIR$/acquisitionFunction.py" />
+        <option value="$PROJECT_DIR$/bayesianOptimization.py" />
+>>>>>>> 040d0072ca2b426c7b9ff7d77dcf9bef3a4eacb1
         <option value="$PROJECT_DIR$/runOptimization.py" />
         <option value="$PROJECT_DIR$/distributionComparison.py" />
       </list>
     </option>
   </component>
+<<<<<<< HEAD
   <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-8" />
     <option name="width" value="976" />
     <option name="height" value="1038" />
+=======
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="241" />
+    <option name="y" value="11" />
+    <option name="width" value="1400" />
+    <option name="height" value="1000" />
+>>>>>>> 040d0072ca2b426c7b9ff7d77dcf9bef3a4eacb1
   </component>
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1">
-      <flattenPackages />
-      <showMembers />
-      <showModules />
-      <showLibraryContents />
-      <hideEmptyPackages />
-      <abbreviatePackageNames />
-      <autoscrollToSource />
-      <autoscrollFromSource />
-      <sortByType />
-      <manualOrder />
+    <navigator proportions="" version="1">
+      <showMembers ProjectPane="true" />
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+<<<<<<< HEAD
       <pane id="Scratches" />
       <pane id="ProjectPane" />
       <pane id="Scope" />
+=======
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="PolymerGrowthSimulator" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PolymerGrowthSimulator" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="PolymerGrowthSimulator" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PolymerGrowthSimulator" type="462c0819:PsiDirectoryNode" />
+              <item name="acquisitionFunction.py" type="8704e2dd:PyFileNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <expand>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="PolymerGrowthSimulator" type="cbb8eebc:String" user="PolymerGrowthSimulator" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+>>>>>>> 040d0072ca2b426c7b9ff7d77dcf9bef3a4eacb1
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../polymer_growth_simulation" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -119,8 +198,9 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.runOptimization">
+  <component name="RunManager">
     <configuration name="runOptimization" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="PolymerGrowthSimulator" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -131,35 +211,44 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="PolymerGrowthSimulator" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/runOptimization.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
     </configuration>
     <recent_temporary>
-      <list size="1">
-        <item index="0" class="java.lang.String" itemvalue="Python.runOptimization" />
+      <list>
+        <item itemvalue="Python.runOptimization" />
       </list>
     </recent_temporary>
   </component>
-  <component name="ShelveChangesManager" show_recycled="false">
-    <option name="remove_strategy" value="false" />
+  <component name="SvnConfiguration">
+    <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="9f643cf4-1aac-41de-bd65-1c215d894fd0" name="Default" comment="" />
-      <created>1529329392530</created>
+      <changelist id="72e8c3fe-cbf4-4fa3-bd78-af15eeb9f9c5" name="Default" comment="" />
+      <created>1529326687011</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1529329392530</updated>
+      <updated>1529326687011</updated>
     </task>
+    <task id="LOCAL-00001" summary="Test compability">
+      <created>1529327751974</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1529327751974</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1048" extended-state="7" />
+    <frame x="0" y="0" width="1920" height="1080" extended-state="6" />
     <editor active="true" />
     <layout>
+<<<<<<< HEAD
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.083333336" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.38706142" sideWeight="0.50416666" order="7" side_tool="true" content_ui="tabs" />
@@ -178,35 +267,52 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.49791667" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+=======
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.11493644" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.33792374" side_tool="true" visible="true" weight="0.32967034" />
+      <window_info anchor="bottom" id="Inspection Results" sideWeight="0.5423729" weight="0.32967034" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49894068" weight="0.32857144" />
+      <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.49947917" weight="0.32908705" />
+      <window_info anchor="bottom" id="Python Console" order="7" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.6620763" visible="true" weight="0.32967034" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+>>>>>>> 040d0072ca2b426c7b9ff7d77dcf9bef3a4eacb1
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <default-breakpoints>
-        <breakpoint type="python-exception">
-          <properties notifyOnTerminate="true" exception="BaseException">
-            <option name="notifyOnTerminate" value="true" />
-          </properties>
-        </breakpoint>
-      </default-breakpoints>
-      <option name="time" value="5" />
-    </breakpoint-manager>
-    <watches-manager />
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Test compability" />
+    <option name="LAST_COMMIT_MESSAGE" value="Test compability" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/runOptimization.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="1407">
           <caret line="72" column="54" lean-forward="false" selection-start-line="72" selection-start-column="54" selection-end-line="72" selection-end-column="54" />
+=======
+        <state relative-caret-position="1152">
+          <caret line="64" column="19" lean-forward="true" selection-start-line="64" selection-start-column="19" selection-end-line="64" selection-end-column="19" />
+>>>>>>> 040d0072ca2b426c7b9ff7d77dcf9bef3a4eacb1
           <folding>
             <element signature="e#0#30#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/gp.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4242">
@@ -275,11 +381,25 @@
         <state relative-caret-position="3045">
           <caret line="149" column="35" lean-forward="false" selection-start-line="149" selection-start-column="35" selection-end-line="149" selection-end-column="35" />
           <folding />
+=======
+    <entry file="file://$USER_HOME$/anaconda3/envs/untitled/lib/python3.6/site-packages/scipy/optimize/optimize.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="292" selection-start-line="292" selection-end-line="292" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/multiprocessing/spawn.py">
+    <entry file="file://$USER_HOME$/anaconda3/envs/untitled/lib/python3.6/site-packages/scipy/optimize/lbfgsb.py">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="334" selection-start-line="334" selection-end-line="334" />
+>>>>>>> 040d0072ca2b426c7b9ff7d77dcf9bef3a4eacb1
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/anaconda3/envs/untitled/lib/python3.6/site-packages/scipy/optimize/_minimize.py">
+      <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="126">
           <caret line="6" column="36" lean-forward="false" selection-start-line="6" selection-start-column="36" selection-end-line="6" selection-end-column="36" />
         </state>
@@ -334,14 +454,26 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+=======
+        <state relative-caret-position="177">
+          <caret line="602" selection-start-line="602" selection-end-line="602" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/acquisitionFunction.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="353">
+          <caret line="119" column="22" lean-forward="true" selection-start-line="119" selection-start-column="22" selection-end-line="119" selection-end-column="22" />
+>>>>>>> 040d0072ca2b426c7b9ff7d77dcf9bef3a4eacb1
           <folding>
-            <element signature="e#0#30#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/distributionComparison.py">
+    <entry file="file://$PROJECT_DIR$/runOptimization.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="3234">
           <caret line="154" column="38" lean-forward="false" selection-start-line="154" selection-start-column="38" selection-end-line="154" selection-end-column="38" />
           <folding>
@@ -368,17 +500,29 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="147">
           <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+=======
+        <state relative-caret-position="191">
+          <caret line="60" column="16" lean-forward="true" selection-start-line="60" selection-start-column="16" selection-end-line="60" selection-end-column="16" />
+>>>>>>> 040d0072ca2b426c7b9ff7d77dcf9bef3a4eacb1
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#30#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gp.py">
+    <entry file="file://$PROJECT_DIR$/bayesianOptimization.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="246">
           <caret line="206" column="52" lean-forward="true" selection-start-line="206" selection-start-column="52" selection-end-line="206" selection-end-column="52" />
           <folding />
+=======
+        <state relative-caret-position="173">
+          <caret line="55" column="47" lean-forward="true" selection-start-line="55" selection-start-column="47" selection-end-line="55" selection-end-column="47" />
+          <folding>
+            <element signature="e#75#93#0" expanded="true" />
+          </folding>
+>>>>>>> 040d0072ca2b426c7b9ff7d77dcf9bef3a4eacb1
         </state>
       </provider>
     </entry>
