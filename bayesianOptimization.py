@@ -7,7 +7,7 @@ import numpy as np
 import sklearn.gaussian_process as gp
 from acquisitionFunction import expectedImprovement, probabilityImprovement
 
-def bayesian_optimisation(n_iters, costFunction, bounds, n_params, x0=None, n_pre_samples=5,
+def bayesianOptimisation(n_iters, costFunction, bounds, n_params, x0=None, n_pre_samples=5,
                           gp_params=None, alpha=1e-5, acquisitionFunction='expected_improvement', random_search=False, epsilon=1e-7):
     """ bayesian_optimisation
 
@@ -58,11 +58,11 @@ def bayesian_optimisation(n_iters, costFunction, bounds, n_params, x0=None, n_pr
     if x0 is None:
         for params in np.random.uniform(bounds[:, 0], bounds[:, 1], (n_pre_samples, bounds.shape[0])):
             x_list.append(params)
-            y_list.append(costFunction(params))
+            y_list.append(costFunction(params, plot=True))
     else:
         for params in x0:
             x_list.append(params)
-            y_list.append(costFunction(params))
+            y_list.append(costFunction(params, plot=True))
 
     xp = np.array(x_list)
     yp = np.array(y_list)
@@ -102,7 +102,7 @@ def bayesian_optimisation(n_iters, costFunction, bounds, n_params, x0=None, n_pr
             
 
         # Sample loss for new set of parameters
-        cv_score = costFunction(next_sample)
+        cv_score = costFunction(next_sample,plot=True)
 
         # Update lists
         x_list.append(next_sample)

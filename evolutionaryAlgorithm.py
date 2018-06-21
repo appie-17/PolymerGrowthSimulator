@@ -5,6 +5,7 @@ from multiprocessing import Pool
 
 p = Pool(4)
 
+
 def _async_evaluate(population, fit_func):
     # Evaluate individual i
     # print(("Evaluating individual {}: {}".format(i, population[i])))
@@ -19,9 +20,9 @@ class EvolutionaryAlgorithm:
     def __init__(self, bounds, pop_size, fitness_function, clipping_function=None, graph=False):
         # time_sim, number_of_molecules, monomer_pool, p_growth, p_death, p_dead_react,
         # l_exponent, d_exponent, l_naked, kill_spawns_new
-        init = np.random.uniform(bounds[:,0], bounds[:,1], (pop_size, len(bounds)))
-        scale = bounds.mean(axis=1)/10
-        self.population = init# Uniformly distributed init
+        init = np.random.uniform(bounds[:, 0], bounds[:, 1], (pop_size, len(bounds)))
+        scale = bounds.mean(axis=1) / 10
+        self.population = init  # Uniformly distributed init
         # Member definitions
         self.fit_func = fitness_function
         self.pop_size = pop_size
@@ -61,7 +62,7 @@ class EvolutionaryAlgorithm:
         # Array for storing the fitnesses for all iterations
         fitnessess = np.zeros((iterations, self.pop_size))
         for i in range(iterations):
-            
+
             self.log("#### iteration {} ####".format(i))
 
             # Evaluate individuals and store fitness values
@@ -77,7 +78,7 @@ class EvolutionaryAlgorithm:
             plt.cla()
             min_fit = np.min(fitnessess, 1)
             averages = np.average(fitnessess, 1)
-            plt.plot(averages[:i+1])
+            plt.plot(averages[:i + 1])
             plt.plot(min_fit)
             # plt.subplot(111)
             try:
@@ -103,8 +104,6 @@ class EvolutionaryAlgorithm:
         self.info("Average fitness: {}".format(np.average(fitness)))
         return fitness
 
-
-
     # Truncated ranked selection
     # TODO: Encapsulate this!
     def selection(self, fitness):
@@ -118,7 +117,7 @@ class EvolutionaryAlgorithm:
     # Copy remaining population until population is at pop_size
     def reproduction(self):
         size = len(self.population)
-        repeats = np.ceil(self.pop_size/size)
+        repeats = np.ceil(self.pop_size / size)
         pop = np.repeat(self.population, repeats, axis=0)
         self.population = pop[:self.pop_size]
 
@@ -149,15 +148,12 @@ class EvolutionaryAlgorithm:
         mutation_rate = 0.2
         x = np.random.random(self.pop_size)
         mask = np.argwhere(x < mutation_rate)
-        cols = np.random.choice(10,len(mask),replace=True)
+        cols = np.random.choice(10, len(mask), replace=True)
         mutations = np.random.normal(scale=self.scale[cols])
-      
+
         self.population[mask, cols] = self.population[mask, cols] + mutations
         if self.clip_func is not None:
             self.clip()
-
-
-
 
 # if __name__ == '__main__':
 #     from eval import process_arguments

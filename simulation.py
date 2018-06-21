@@ -203,9 +203,12 @@ def polymer(time_sim, number_of_molecules, monomer_pool, p_growth, p_death, p_de
     # close(v)
     return distribution
 
-# polymer(9.14000000e+02, 6.15220000e+04 ,1.39980410e+07 ,4.76811976e-01
-#  ,7.13619663e-06 ,1.82871823e-01 ,2.23153483e-01 ,1.76927468e-01
-#  ,1 ,1.00000000e+00,video=0,final_plot=1)
+
+if __name__ == '__main__':
+    arg = [1.03233275e+03, 1.23217110e+05 ,3.05036902e+07, 8.77104312e-01,
+ 5.57133605e-05, 3.92934831e-02, 8.43825635e-01 ,6.98164507e-01,
+ 1.87630740e-01, 1.00000000e+00]
+    polymer(*arg,video=0,final_plot=1)
 
 #Parameter Bryn
 # polymer(1000, 100000,     31600000,   0.2,
