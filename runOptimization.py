@@ -57,7 +57,7 @@ if __name__ == '__main__':
     #Compare distributions after normalizing by either minMaxNorm or medianFoldNorm.
     #compareDist =  minMaxNorm('Data/polymer_30k.xlsx', polymer)
     #compareDist =  medianFoldNorm('Data/polymer_30k.xlsx', polymer)
-    compareDist = Trans('Data/polymer_30k.xlsx', polymer)
+    compareDist = Trans('Data/polymer_20k.xlsx', polymer)
 
     
     #Use compare

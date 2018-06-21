@@ -26,6 +26,7 @@ class distributionComparison:
         self.exp_val = np.concatenate((np.zeros(self.exp_cl_min - 1), self.exp_val))        
         self.sigma = [1,3,5,5,5]
         self.fig, self.axes = plt.subplots(ncols=3)
+        self.lowest_cost = np.inf
 
     def costFunction(self):
     	pass
@@ -38,7 +39,7 @@ class minMaxNorm(distributionComparison) :
 	def __init__(self,file_name,simulation):
 		super().__init__(file_name, simulation)
 			
-	def costFunction(self, arguments, lowest_cost, plot=True):
+	def costFunction(self, arguments, plot=True):
 		dead, living, coupled = self.sim(*arguments)
 		sim_data = np.concatenate((dead, living, coupled))
 		sim_cl_max = sim_data.max()	
@@ -79,8 +80,8 @@ class minMaxNorm(distributionComparison) :
 			self.axes[1].clear()
 			self.axes[1].bar(np.arange(sim_norm.shape[0]), sim_norm)
 			self.axes[1].set_title('Simulation')
-			if cost < lowest_cost:
-				self.axes[2].clear()
+			if cost < self.lowest_cost:
+				self.lowest_cost = cost
 				self.axes[2].bar(np.arange(sim_norm.shape[0]), sim_norm)
 				self.axes[2].set_title('Best Match')
 			plt.pause(1e-40)
@@ -92,7 +93,7 @@ class medianFoldNorm(distributionComparison) :
 	def __init__(self, file_name, simulation):
 		super().__init__(file_name, simulation)
 	
-	def costFunction(self, arguments, lowest_cost, plot=True):
+	def costFunction(self, arguments, plot=True):
 		dead, living, coupled = self.sim(*arguments)
 		sim_data = np.concatenate((dead, living, coupled))
 		sim_cl_max = sim_data.max()
@@ -131,6 +132,7 @@ class medianFoldNorm(distributionComparison) :
 			cost += np.sum(abs((exp_norm[indices] - sim_norm[indices]))**(1/self.sigma[i]))
 
 
+
 		# Compute cost by l1- or l2-norm
 		# if exp_norm_sum > sim_norm_sum:
 		# 	cost = np.sum(abs((exp_norm - sim_norm)**2)) / (sim_norm_sum / exp_norm_sum)
@@ -150,7 +152,8 @@ class medianFoldNorm(distributionComparison) :
 			self.axes[1].clear()
 			self.axes[1].bar(np.arange(sim_norm.shape[0]), sim_norm)
 			self.axes[1].set_title('Simulation')
-			if cost < lowest_cost:
+			if cost < self.lowest_cost:
+				self.lowest_cost = cost
 				self.axes[2].clear()
 				self.axes[2].bar(np.arange(sim_norm.shape[0]), sim_norm)
 				self.axes[2].set_title('Best Match')
@@ -165,7 +168,7 @@ class Trans(distributionComparison):
 	def __init__(self, file_name, simulation):
 		super().__init__(file_name, simulation)
 
-	def costFunction(self, arguments, lowest_cost, plot=True):
+	def costFunction(self, arguments, plot=True):
 		dead, living, coupled = self.sim(*arguments)
 		sim_data = np.concatenate((dead, living, coupled))
 		sim_cl_max = sim_data.max()
@@ -234,8 +237,8 @@ class Trans(distributionComparison):
 			self.axes[1].clear()
 			self.axes[1].bar(np.arange(sim_norm.shape[0]), sim_norm)
 			self.axes[1].set_title('Simulation')
-			if cost < lowest_cost :
-				self.axes[2].clear()
+			if cost < self.lowest_cost:
+				self.lowest_cost = cost
 				self.axes[2].bar(np.arange(sim_norm.shape[0]), sim_norm)
 				self.axes[2].set_title('Best Match')
 			plt.pause(1e-40)
