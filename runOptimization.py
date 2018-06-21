@@ -56,19 +56,20 @@ def process_arguments(arguments):
 if __name__ == '__main__':
     #Compare distributions after normalizing by either minMaxNorm or medianFoldNorm. 
     #compareDist =  minMaxNorm('Data/polymer_20k.xlsx', polymer)
-    compareDist =  Trans('Data/polymer_30k.xlsx', polymer)
+    compareDist =  medianFoldNorm('Data/polymer_20k.xlsx', polymer)
     
     #Use compare
     # hillClimbing(compareDist.costFunction, process_arguments)
-    param_boundaries = np.array([[900,1100],[90000,110000],[3000000,32000000],
+    param_boundaries = np.array([[900,1100],[90000,150000],[30000000,32000000],
                    [0,1],[0,0.0001],[0,1],[0,1],[0,1],[0,1],[1,1]])
-    # alg = EvolutionaryAlgorithm(param_boundaries, 20, compareDist.costFunction, process_arguments, graph=True)
+    # alg = EvolutionaryAlgorithm(param_boundaries, 20, compareDist.costFunction, process_arguments)
     # alg.log_level = 2
     # print(alg.run(100))
     # print(alg.population)
 
     X0 = np.array([[1000, 100000, 31600000, 0.2,
     0.0000806, 0.5, 0.67, 0.67, 1, 1]])
-    xp, yp, model = bayesian_optimisation(n_iters=15,costFunction=compareDist.costFunction, bounds=param_boundaries, n_params=10,
-                        x0=None, n_pre_samples=10,gp_params=None, alpha=0.1,acquisitionFunction='probability_improvement', epsilon=1e-5)
+    xp, yp, model = bayesian_optimisation(n_iters=100,costFunction=compareDist.costFunction, bounds=param_boundaries, n_params=10,
+                        x0=None, n_pre_samples=1,gp_params=None, alpha=0.1,acquisitionFunction='probability_improvement', epsilon=1e-5)
     np.savetxt(fname='testitest', X = yp)
+    np.save(file='gp_model', arr=model)

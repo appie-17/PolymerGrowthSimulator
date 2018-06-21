@@ -12,27 +12,28 @@ when comparing two distributions.
 """
 
 class distributionComparison:
-    def __init__(self, file_name, simulation):
-        
-        self.sim = simulation
-        self.exp_df = pd.read_excel(file_name)
-        self.exp_molmass = self.exp_df[self.exp_df.columns[0]].values
-        self.exp_values = self.exp_df[self.exp_df.columns[1]].values
-        self.exp_chainlen = ((self.exp_molmass-180) / 99.13).astype(int)
-        self.exp_cl_min = self.exp_chainlen.min()        
-        self.exp_cl_val = dict(zip(self.exp_chainlen, self.exp_values))
-        self.exp_cl_val.update(zip(np.arange(1, self.exp_cl_min + 1), np.zeros(self.exp_cl_min)))
-        self.exp_val = np.array(list(self.exp_cl_val.values()))        
-        self.exp_val = np.concatenate((np.zeros(self.exp_cl_min - 1), self.exp_val))        
-        self.sigma = [1,3,5,5,5]
-        self.fig, self.axes = plt.subplots(ncols=2)
+	def __init__(self, file_name, simulation):
 
-    def costFunction(self):
-    	pass
+		self.sim = simulation
+		self.exp_df = pd.read_excel(file_name)
+		self.exp_molmass = self.exp_df[self.exp_df.columns[0]].values
+		self.exp_values = self.exp_df[self.exp_df.columns[1]].values
+		self.exp_chainlen = ((self.exp_molmass-180) / 99.13).astype(int)
+		self.exp_cl_min = self.exp_chainlen.min()
+		self.exp_cl_val = dict(zip(self.exp_chainlen, self.exp_values))
+		self.exp_cl_val.update(zip(np.arange(1, self.exp_cl_min + 1), np.zeros(self.exp_cl_min)))
+		self.exp_val = np.array(list(self.exp_cl_val.values()))
+		self.exp_val = np.concatenate((np.zeros(self.exp_cl_min - 1), self.exp_val))
+		self.sigma = [1,3,5,5,5]
+		self.fig, self.axes = plt.subplots(ncols=2)
 
-    # Input arguments to generate simulation results and return
-    # difference with experimental data
-    
+
+	def costFunction(self):
+		pass
+
+	# Input arguments to generate simulation results and return
+	# difference with experimental data
+
 
 class minMaxNorm(distributionComparison) :
 	def __init__(self,file_name,simulation):
@@ -123,10 +124,11 @@ class medianFoldNorm(distributionComparison) :
 			self.axes[0].clear()
 			self.axes[0].bar(np.arange(exp_norm.shape[0]), exp_norm)
 			self.axes[0].set_title('Experiment')
+
 			self.axes[1].clear()
 			self.axes[1].bar(np.arange(sim_norm.shape[0]), sim_norm)
 			self.axes[1].set_title('Simulation')
-			plt.pause(1e-40)		
+			plt.pause(1e-40)
 
 		#Cost function based on weights by standard deviation
 		exp_sd, exp_mean = np.std(exp_norm), np.mean(exp_norm)

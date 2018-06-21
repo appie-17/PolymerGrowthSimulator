@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 from tkinter import TclError
 from multiprocessing import Pool
 
-p = Pool(4)
+p = Pool(1)
 
 def _async_evaluate(population, fit_func):
     # Evaluate individual i
@@ -16,7 +16,7 @@ def _async_evaluate(population, fit_func):
 
 class EvolutionaryAlgorithm:
 
-    def __init__(self, bounds, pop_size, fitness_function, clipping_function=None, graph=False):
+    def __init__(self, bounds, pop_size, fitness_function, clipping_function=None):
         # time_sim, number_of_molecules, monomer_pool, p_growth, p_death, p_dead_react,
         # l_exponent, d_exponent, l_naked, kill_spawns_new
         init = np.random.uniform(bounds[:,0], bounds[:,1], (pop_size, len(bounds)))
@@ -27,7 +27,7 @@ class EvolutionaryAlgorithm:
         self.pop_size = pop_size
         self.scale = scale
         self.clip_func = clipping_function
-        self.graph = graph
+
         # Indicator for how verbose the EA should be 3 is print everything --> debug. and 0 is no output
         self.log_level = 0
 
@@ -79,7 +79,7 @@ class EvolutionaryAlgorithm:
             averages = np.average(fitnessess, 1)
             plt.plot(averages[:i+1])
             plt.plot(min_fit)
-            # plt.subplot(111)
+            plt.subplot(111)
             try:
                 plt.pause(1e-40)
             except TclError:
@@ -92,7 +92,7 @@ class EvolutionaryAlgorithm:
 
         size = len(self.population)
 
-        if True:
+        if False:
             fitness = np.array(_async_evaluate(self.population, self.fit_func))
         else:
             for i in range(size):

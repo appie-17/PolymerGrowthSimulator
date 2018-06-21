@@ -17,10 +17,12 @@ def bayesian_optimisation(n_iters, costFunction, bounds, n_params, x0=None, n_pr
     ----------
         n_iters: integer.
             Number of iterations to run the search algorithm.
-        sample_loss: function.
-            Function to be optimised.
+        costFunction: function.
+            Function to be optimized.
         bounds: array-like, shape = [n_params, 2].
             Lower and upper bounds on the parameters of the function `sample_loss`.
+        n_params: integer.
+            Number of parameters to be optimized
         x0: array-like, shape = [n_pre_samples, n_params].
             Array of initial points to sample the loss function for. If None, randomly
             samples from the loss function.
@@ -28,11 +30,14 @@ def bayesian_optimisation(n_iters, costFunction, bounds, n_params, x0=None, n_pr
             If x0 is None, samples `n_pre_samples` initial points from the loss function.
         gp_params: dictionary.
             Dictionary of parameters to pass on to the underlying Gaussian Process.
+        alpha: double.
+            Variance of the error term of the GP.
+        acquisitionFunction: string.
+            Choose the acquisitionFunction to optimize and retreive the next best sample from the gaussian process,
+            either 'expected_improvement' or 'probability_improvement'.
         random_search: integer.
             Flag that indicates whether to perform random search or L-BFGS-B optimisation
             over the acquisition function.
-        alpha: double.
-            Variance of the error term of the GP.
         epsilon: double.
             Precision tolerance for floats.
     """
@@ -84,15 +89,11 @@ def bayesian_optimisation(n_iters, costFunction, bounds, n_params, x0=None, n_pr
         # Sample next hyperparameter
         if random_search:
             x_random = np.random.uniform(bounds[:, 0], bounds[:, 1], size=(random_search, n_params))
-            
             ei = -1 * acquisition.sampleFunction(x_random, model, yp)
-            # ei = -1 * probability_improvement(x_random, model, yp, greater_is_better=False, n_params=n_params)
             next_sample = x_random[np.argmax(ei), :]
             
         else:
             next_sample = acquisition.optimizeAcquisition(model, yp, bounds=bounds, n_restarts=10)
-            
-            # next_sample = sample_next_hyperparameter(probability_improvement, model, yp, greater_is_better=False, bounds=bounds, n_restarts=100)
 
         # Duplicates will break the GP. In case of a duplicate, we will randomly sample a next query point.
         if np.all(np.abs(next_sample - xp) <= epsilon):
