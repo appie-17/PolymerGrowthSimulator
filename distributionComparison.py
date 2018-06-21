@@ -25,7 +25,7 @@ class distributionComparison:
         self.exp_val = np.array(list(self.exp_cl_val.values()))        
         self.exp_val = np.concatenate((np.zeros(self.exp_cl_min - 1), self.exp_val))        
         self.sigma = [1,3,5,5,5]
-        self.fig, self.axes = plt.subplots(ncols=2)
+        self.fig, self.axes = plt.subplots(ncols=3)
 
     def costFunction(self):
     	pass
@@ -38,7 +38,7 @@ class minMaxNorm(distributionComparison) :
 	def __init__(self,file_name,simulation):
 		super().__init__(file_name, simulation)
 			
-	def costFunction(self, arguments, plot=False):
+	def costFunction(self, arguments, lowest_cost, plot=True):
 		dead, living, coupled = self.sim(*arguments)
 		sim_data = np.concatenate((dead, living, coupled))
 		sim_cl_max = sim_data.max()	
@@ -60,16 +60,6 @@ class minMaxNorm(distributionComparison) :
 		sim_norm = (sim_val) / sim_val_max
 		sim_norm_sum = np.sum(sim_norm)
 
-		# Plot difference after certain number of parameter iterations
-		if plot:				
-			plt.figure(self.fig.number)
-			self.axes[0].clear()
-			self.axes[0].bar(np.arange(exp_norm.shape[0]), exp_norm)
-			self.axes[0].set_title('Experiment')
-			self.axes[1].clear()
-			self.axes[1].bar(np.arange(sim_norm.shape[0]), sim_norm)
-			self.axes[1].set_title('Simulation')
-			plt.pause(1e-40)								
 
 		# Compute difference by l1- or l2-norm
 		if exp_norm_sum > sim_norm_sum:
@@ -80,6 +70,21 @@ class minMaxNorm(distributionComparison) :
 			cost = np.sum(abs(exp_norm - sim_norm)) / (exp_norm_sum / sim_norm_sum) ** 2
 		# cost = np.sum(np.sqrt((exp_norm - sim_norm)**2))/(exp_norm_sum/sim_norm_sum)**2		
 
+		# Plot difference after certain number of parameter iterations
+		if plot:
+			plt.figure(self.fig.number)
+			self.axes[0].clear()
+			self.axes[0].bar(np.arange(exp_norm.shape[0]), exp_norm)
+			self.axes[0].set_title('Experiment')
+			self.axes[1].clear()
+			self.axes[1].bar(np.arange(sim_norm.shape[0]), sim_norm)
+			self.axes[1].set_title('Simulation')
+			if cost < lowest_cost:
+				self.axes[2].clear()
+				self.axes[2].bar(np.arange(sim_norm.shape[0]), sim_norm)
+				self.axes[2].set_title('Best Match')
+			plt.pause(1e-40)
+
 		return cost
 		# dead, living, coupled = [(180+99.13*x) for x in sim_data]	
 
@@ -87,7 +92,7 @@ class medianFoldNorm(distributionComparison) :
 	def __init__(self, file_name, simulation):
 		super().__init__(file_name, simulation)
 	
-	def costFunction(self, arguments, plot=True):
+	def costFunction(self, arguments, lowest_cost, plot=True):
 		dead, living, coupled = self.sim(*arguments)
 		sim_data = np.concatenate((dead, living, coupled))
 		sim_cl_max = sim_data.max()
@@ -116,17 +121,7 @@ class medianFoldNorm(distributionComparison) :
 		sim_norm_sum = np.sum(sim_norm)
 		exp_norm = exp_val
 		exp_norm_sum = np.sum(exp_norm)
-		
-		# Plot difference after certain number of parameter iterations
-		if plot:			
-			plt.figure(self.fig.number)
-			self.axes[0].clear()
-			self.axes[0].bar(np.arange(exp_norm.shape[0]), exp_norm)
-			self.axes[0].set_title('Experiment')
-			self.axes[1].clear()
-			self.axes[1].bar(np.arange(sim_norm.shape[0]), sim_norm)
-			self.axes[1].set_title('Simulation')
-			plt.pause(1e-40)		
+
 
 		#Cost function based on weights by standard deviation
 		exp_sd, exp_mean = np.std(exp_norm), np.mean(exp_norm)
@@ -146,7 +141,22 @@ class medianFoldNorm(distributionComparison) :
 		# 	cost = np.sum(abs((exp_norm - sim_norm)**2)) / (exp_norm_sum / sim_norm_sum)
 		# cost = np.sum(np.sqrt((exp_norm - sim_norm)**2))/(exp_norm_sum/sim_norm_sum)**2
 		#print(cost)
-		
+		# Plot difference after certain number of parameter iterations
+		if plot:
+			plt.figure(self.fig.number)
+			self.axes[0].clear()
+			self.axes[0].bar(np.arange(exp_norm.shape[0]), exp_norm)
+			self.axes[0].set_title('Experiment')
+			self.axes[1].clear()
+			self.axes[1].bar(np.arange(sim_norm.shape[0]), sim_norm)
+			self.axes[1].set_title('Simulation')
+			if cost < lowest_cost:
+				self.axes[2].clear()
+				self.axes[2].bar(np.arange(sim_norm.shape[0]), sim_norm)
+				self.axes[2].set_title('Best Match')
+			plt.pause(1e-40)
+
+
 		return cost
 		# dead, living, coupled = [(180+99.13*x) for x in sim_data]
 
@@ -155,7 +165,7 @@ class Trans(distributionComparison):
 	def __init__(self, file_name, simulation):
 		super().__init__(file_name, simulation)
 
-	def costFunction(self, arguments, plot=True):
+	def costFunction(self, arguments, lowest_cost, plot=True):
 		dead, living, coupled = self.sim(*arguments)
 		sim_data = np.concatenate((dead, living, coupled))
 		sim_cl_max = sim_data.max()
@@ -195,16 +205,6 @@ class Trans(distributionComparison):
 		exp_norm = exp_val
 		exp_norm_sum = np.sum(exp_norm)
 
-		# Plot difference after certain number of parameter iterations
-		if plot:
-			plt.figure(self.fig.number)
-			self.axes[0].clear()
-			self.axes[0].bar(np.arange(exp_norm.shape[0]), exp_norm)
-			self.axes[0].set_title('Experiment')
-			self.axes[1].clear()
-			self.axes[1].bar(np.arange(sim_norm.shape[0]), sim_norm)
-			self.axes[1].set_title('Simulation')
-			plt.pause(1e-40)
 
 		# Cost function based on weights by standard deviation
 		exp_sd, exp_mean = np.std(exp_norm), np.mean(exp_norm)
@@ -223,7 +223,22 @@ class Trans(distributionComparison):
 		# 	cost = np.sum(abs((exp_norm - sim_norm)**2)) / (exp_norm_sum / sim_norm_sum)
 		# cost = np.sum(np.sqrt((exp_norm - sim_norm)**2))/(exp_norm_sum/sim_norm_sum)**2
 		# print(cost)
+		cost = cost*(np.exp(abs(f/3)))
 
+        # Plot difference after certain number of parameter iterations
+		if plot:
+			plt.figure(self.fig.number)
+			self.axes[0].clear()
+			self.axes[0].bar(np.arange(exp_norm.shape[0]), exp_norm)
+			self.axes[0].set_title('Experiment')
+			self.axes[1].clear()
+			self.axes[1].bar(np.arange(sim_norm.shape[0]), sim_norm)
+			self.axes[1].set_title('Simulation')
+			if cost < lowest_cost :
+				self.axes[2].clear()
+				self.axes[2].bar(np.arange(sim_norm.shape[0]), sim_norm)
+				self.axes[2].set_title('Best Match')
+			plt.pause(1e-40)
 
-		return cost*(np.exp(abs(f/3)))
+		return cost
 		# dead, living, coupled = [(180+99.13*x) for x in sim_data]

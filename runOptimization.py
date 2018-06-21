@@ -55,8 +55,9 @@ def process_arguments(arguments):
 
 if __name__ == '__main__':
     #Compare distributions after normalizing by either minMaxNorm or medianFoldNorm. 
-    #compareDist =  minMaxNorm('Data/polymer_20k.xlsx', polymer)
-    compareDist =  Trans('Data/polymer_30k.xlsx', polymer)
+    #compareDist =  minMaxNorm('Data/polymer_30k.xlsx', polymer)
+    #compareDist =  medianFoldNorm('Data/polymer_30k.xlsx', polymer)
+    compareDist = Trans('Data/polymer_30k.xlsx', polymer)
     
     #Use compare
     # hillClimbing(compareDist.costFunction, process_arguments)
@@ -67,8 +68,7 @@ if __name__ == '__main__':
     # print(alg.run(100))
     # print(alg.population)
 
-    X0 = np.array([[1000, 100000, 31600000, 0.2,
-    0.0000806, 0.5, 0.67, 0.67, 1, 1]])
-    xp,yp = bayesian_optimisation(15,compareDist.costFunction, param_boundaries,
+    #X0 = np.array([[1000, 100000, 31600000, 0.2,
+    #0.0000806, 0.5, 0.67, 0.67, 1, 1]])
+    xp,yp = bayesian_optimisation(10,compareDist.costFunction, param_boundaries,
                         None,1,alpha=0.1,epsilon=1e-5)
-    np.savetxt(fname='testitest', X = yp)

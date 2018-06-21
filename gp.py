@@ -155,11 +155,11 @@ def bayesian_optimisation(n_iters, sample_loss, bounds, x0=None, n_pre_samples=5
     if x0 is None:
         for params in np.random.uniform(bounds[:, 0], bounds[:, 1], (n_pre_samples, bounds.shape[0])):
             x_list.append(params)
-            y_list.append(sample_loss(params))
+            y_list.append(sample_loss(params, 99999999))
     else:
         for params in x0:
             x_list.append(params)
-            y_list.append(sample_loss(params))
+            y_list.append(sample_loss(params, int('inf')))
 
     xp = np.array(x_list)
     yp = np.array(y_list)
@@ -204,7 +204,7 @@ def bayesian_optimisation(n_iters, sample_loss, bounds, x0=None, n_pre_samples=5
             # next_sample = normalizeInput(next_sample, bounds)
 
         # Sample loss for new set of parameters
-        cv_score = sample_loss(next_sample)
+        cv_score = sample_loss(next_sample, np.min(yp))
 
         # Update lists
         x_list.append(next_sample)
@@ -213,5 +213,6 @@ def bayesian_optimisation(n_iters, sample_loss, bounds, x0=None, n_pre_samples=5
         # Update xp and yp
         xp = np.array(x_list)
         yp = np.array(y_list)
+        print(yp)
 
     return xp, yp, model
