@@ -1,9 +1,9 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from tkinter import TclError
-from multiprocessing import Pool
+from multiprocessing import Pool, freeze_support
 
-p = Pool(4)
+p = None
 
 
 def _async_evaluate(population, fit_func):
@@ -29,6 +29,8 @@ class EvolutionaryAlgorithm:
         self.scale = scale
         self.clip_func = clipping_function
         self.graph = graph
+        global p
+        p = Pool(4)
         # Indicator for how verbose the EA should be 3 is print everything --> debug. and 0 is no output
         self.log_level = 0
 
@@ -73,21 +75,30 @@ class EvolutionaryAlgorithm:
             self.mutation()
 
             # Show the average and max fitness values per iterationif self.graph:
-            plt.figure(2)
-            plt.subplot(111)
-            plt.cla()
-            min_fit = np.min(fitnessess, 1)
-            averages = np.average(fitnessess, 1)
-            plt.plot(averages[:i + 1])
-            plt.plot(min_fit)
+            # plt.figure(2)
             # plt.subplot(111)
-            try:
-                plt.pause(1e-40)
-            except TclError:
-                pass
+            # plt.cla()
+            # min_fit = np.min(fitnessess, 1)
+            # averages = np.average(fitnessess, 1)
+            # plt.plot(averages[:i + 1])
+            # plt.plot(min_fit)
+            # # plt.subplot(111)
+            # try:
+            #     plt.pause(1e-40)
+            # except TclError:
+            #     pass
+            best = self.get_best_individual(fitnessess, i)
+            self.fit_func(best, plot=True)
 
         return fitnessess
 
+    def get_best_individual(self, fitnesses, row=None):
+        if row is None:
+            last_fit = fitnesses[fitnesses.shape[0] - 1,:]
+        else:
+            last_fit = fitnesses[row, :]
+        ind = np.agmin(last_fit)
+        return self.population[ind]
     # Evaluation of the population
     def evaluation(self):
 
@@ -111,7 +122,7 @@ class EvolutionaryAlgorithm:
         order = np.argsort(fitness)
         order = order[:n]
         print(self.population[order[-1]])
-        self.fit_func(self.population[order[-1]], plot=True)
+        # self.fit_func(self.population[order[-1]])
         self.population = self.population[order]
 
     # Copy remaining population until population is at pop_size

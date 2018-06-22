@@ -11,7 +11,7 @@ when comparing two distributions.
 """
 
 class distributionComparison:
-	def __init__(self, file_name, simulation):
+	def __init__(self, file_name, simulation, fig=None):
 
 		self.sim = simulation
 		self.exp_df = pd.read_excel(file_name)
@@ -26,7 +26,10 @@ class distributionComparison:
 
 		self.sigma = [1,3,5,5,5]
 
-		self.fig = plt.figure(figsize=(15,5))
+		if not fig:
+			self.fig = plt.figure(figsize=(15,5))
+		else:
+			self.fig = fig
 		self.ax0, self.ax1, self.ax2 = self.fig.add_subplot(131), self.fig.add_subplot(132), self.fig.add_subplot(133)
 		self.lowest_cost = np.inf
 
@@ -68,7 +71,7 @@ class minMaxNorm(distributionComparison) :
 	def __init__(self,file_name,simulation):
 		super().__init__(file_name, simulation)
 			
-	def costFunction(self, arguments, plot=True):
+	def costFunction(self, arguments, plot=False):
 
 		dead, living, coupled = self.sim(*arguments)
 		exp_val, sim_val = self.preprocessDist(dead, living, coupled)
@@ -97,8 +100,8 @@ class minMaxNorm(distributionComparison) :
 		return cost
 
 class medianFoldNorm(distributionComparison) :
-	def __init__(self, file_name, simulation):
-		super().__init__(file_name, simulation)
+	def __init__(self, file_name, simulation, fig=None):
+		super().__init__(file_name, simulation, fig)
 		self.median_foldNorm=1
 
 	def costFunction(self, arguments, plot=False):
@@ -123,7 +126,7 @@ class medianFoldNorm(distributionComparison) :
 			cost += np.sum(abs((exp_norm[indices] - sim_norm[indices]))**(1/self.sigma[i]))
 
 		if plot:
-			print(arguments)
+			# print(arguments)
 			self.plotDistributions(exp_norm, sim_norm, cost)
 
 		return cost
@@ -131,8 +134,8 @@ class medianFoldNorm(distributionComparison) :
 
 
 class translationInvariant(distributionComparison):
-	def __init__(self, file_name, simulation):
-		super().__init__(file_name, simulation)
+	def __init__(self, file_name, simulation, fig=None):
+		super().__init__(file_name, simulation, fig)
 		self.median_foldNorm = 1
 
 	def costFunction(self, arguments, plot=False):
