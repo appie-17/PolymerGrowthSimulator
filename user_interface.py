@@ -2,7 +2,7 @@ import tkinter as tk
 import numpy as np
 import tkinter.ttk as ttk
 from simulation import polymer
-from distributionComparison import medianFoldNorm
+from distributionComparison import medianFoldNorm, minMaxNorm
 from evolutionaryAlgorithm import EvolutionaryAlgorithm
 from bayesianOptimization import bayesianOptimisation
 
@@ -10,17 +10,17 @@ from bayesianOptimization import bayesianOptimisation
 # CONSTANTS
 EA = "evolutionary algorithm"
 BO = "bayesian optimization"
-MFC = "MedianFoldChange"
+
 
 class Parameter:
-    def __init__(self,name,  t, value):
+    def __init__(self,name,  t, value, widget=None):
         if not isinstance(value, t):
             raise ValueError("{} is not of type {}".format(value, t))
         self.name = name
         self.type = t
         self.value = value
-        tk.IntVar()
-
+        if widget is not None:
+            self.set_var(widget)
 
     def determine_var(self, t):
         tk_vars = {int:tk.IntVar, float:tk.DoubleVar, str:tk.StringVar, bool:tk.BooleanVar}
@@ -73,41 +73,116 @@ def _try_cast( val, t):
     except ValueError:
             return False
 
-class App(tk.Frame):
+MFC = "MedianFoldChange"
+MM = "MaxMinNorm"
+class CostFunctionChooser:
+    def __init__(self, parent):
+        self.parent = parent
+        lf = tk.LabelFrame(parent, text="difference function")
+        file_parameter = Parameter("filename", str, "Data\polymer_20k.xlsx")
+        file_parameter.set_var(parent)
+        self.parameters = {
+            MFC: [file_parameter],
+            MM: [file_parameter]
+        }
+        self.function_list = tk.Listbox(lf, height=2, exportselection=0)
+        self.functions = [MFC, MM]
+        [self.function_list.insert(tk.END, x) for x in self.functions]
+        self.function_list.bind('<<ListboxSelect>>', self.switch)
+        self.function_list.select_set(0)
+        self.function_list.pack()
+        lf.pack()
 
+        param_frame = tk.LabelFrame(self.parent, text="parameters")
+        param_frame.pack()
+        self.function_frames = self.build_frames(self.parameters, param_frame)
+        self.current_frame = None
+        self.switch(None)
+
+
+        self.parameter_frame = tk.LabelFrame(parent, text="parameters")
+        self.parameter_frame.pack()
+
+    def switch(self, event):
+        if self.current_frame is not None:
+            self.current_frame.pack_forget()
+
+        index = self.function_list.curselection()[0]
+        func = self.functions[index]
+        new_frame = self.function_frames[func]
+        new_frame.pack()
+        self.current_frame = new_frame
+
+
+
+    def build_frames(self, functions, parent_widget):
+        frames = {}
+        for function in functions:
+            parent = tk.Frame(parent_widget)
+            for param in self.parameters[function]:
+                control = None
+                param_type = param.get_type()
+                if param_type in [int, str, float]:
+                    lab = tk.Label(parent, text=param.get_name())
+                    lab.pack()
+                    control = tk.Entry(parent,
+                                       validate='all',
+                                       validatecommand=(validation[param_type], '%s', '%P', '%W'),
+                                       name=param.get_name(),
+                                       textvar=param.get_var())
+                elif param_type is bool:
+                    control = tk.Checkbutton(parent, text=param.get_name(), name=param.get_name())
+                control.pack()
+            frames[function] = parent
+        return frames
+
+    def get_function(self):
+        index = self.function_list.curselection()[0]
+        func = self.functions[index]
+        return func, self.parameters[func]
+
+
+class App(tk.Frame):
     def __init__(self, master=None):
         super(App, self).__init__(master)
         self.pack()
+
         self.fig = Figure()
         self.result_frame = tk.LabelFrame(self, text="result")
         self.plot_window = FigureCanvasTkAgg(self.fig, self.result_frame)
         self.plot_window.draw()
         self.plot_window.get_tk_widget().pack()
         self.result_frame.grid(column=2, row=0, rowspan=2)
+
+        self.function_frame = tk.LabelFrame(self, text="cost function")
+        self.function_chooser = CostFunctionChooser(self.function_frame)
+        self.function_frame.grid(column=1, row=1)
+
         # param_boundaries = np.array([[900, 1100], [90000, 110000], [3000000, 32000000],
         #                              [0, 1], [0, 0.0001], [0, 1], [0, 1], [0, 1], [0, 1], [1, 1]])
-        self.parameters  = [
-            Parameter("time_sim", int, 1000),
-            Parameter("number_of_molecules", int, 100000),
-            Parameter("monomer_pool", int, 3100000),
-            Parameter("p_growth", float, 0.5),
-            Parameter("p_death", float, 0.00005),
-            Parameter("p_dead_react", float, 0.5),
-            Parameter("l_exponent", float, 0.5),
-            Parameter("d_exponent", float, 0.5),
-            Parameter("l_naked", float, 0.5),
-            Parameter("kill_spawns_new", bool, True)
+        self.lower_parameters  = [
+            Parameter("l_time_sim", int, 1000),
+            Parameter("l_number_of_molecules", int, 100000),
+            Parameter("l_monomer_pool", int, 3100000),
+            Parameter("l_p_growth", float, 0.5),
+            Parameter("l_p_death", float, 0.00005),
+            Parameter("l_p_dead_react", float, 0.5),
+            Parameter("l_l_exponent", float, 0.5),
+            Parameter("l_d_exponent", float, 0.5),
+            Parameter("l_l_naked", float, 0.5),
+            Parameter("l_kill_spawns_new", bool, True)
         ]
-
+        self.upper_parameters = [Parameter("u_" + x.get_name()[2:], x.get_type(), x.value) for x in self.lower_parameters]
         # EA: #iterations, population size, fitness_function
         self.alg_parameters = {
             EA: [Parameter("#iterations",int, value=25),
-                 Parameter("population_size", int, 10),
-                 Parameter("distribution file location", str, "Data\polymer_20k.xlsx")],
+                 Parameter("population_size", int, 10)
+                # ,Parameter("distribution file location", str, "Data\polymer_20k.xlsx")
+                ],
             BO:[Parameter("#iterations", int, 10)]
         }
-        [x.set_var(self) for x in self.parameters]
-        register_validation_functions(self)
+        [x.set_var(self) for x in self.lower_parameters]
+        [x.set_var(self) for x in self.upper_parameters]
         self.build_alg_selector()
         self.build_widgets()
 
@@ -118,12 +193,12 @@ class App(tk.Frame):
         self.alg_list.insert(tk.END, EA)
         self.alg_list.insert(tk.END, BO)
         self.alg_list.bind('<<ListboxSelect>>', self._switch_alg_parameters)
-        self.alg_list.grid()
+        self.alg_list.pack()
         # Force the settings to be shown
         # build frames for each alg
         self.alg_frames = {}
         for alg in self.alg_parameters:
-            f = tk.LabelFrame(self, text=alg)
+            f = tk.LabelFrame(lf, text=alg)
             params = self.alg_parameters[alg]
             for param in params:
                 param.set_var(self)
@@ -148,62 +223,84 @@ class App(tk.Frame):
         except IndexError:
             return
         if self.current_alg_frame is not None:
-            self.current_alg_frame.grid_forget()
+            self.current_alg_frame.pack_forget()
         frame = self.alg_frames[selected]
-        frame.grid(column=1, row=1)
+        frame.pack()#column=1, row=1)
         self.current_alg_frame = frame
 
     def build_widgets(self):
         self.param_controls = {}
         self.parameter_frame = tk.LabelFrame(self, text="initial parameters")
+        self.lower_frame = tk.LabelFrame(self.parameter_frame, text="lower bounds")
+        self.upper_frame = tk.LabelFrame(self.parameter_frame, text="upper bounds")
         self.parameter_frame.grid(column=0, row=0, rowspan=2)
 
-        for param in self.parameters:
+        self.lower_frame.grid(column=0, row=0)
+        self.upper_frame.grid(column=1, row=0)
+        self.create_parameter_controls(self.lower_parameters, self.lower_frame)
+        self.create_parameter_controls(self.upper_parameters, self.upper_frame)
+
+        self.run = tk.Button(self, text="Run algorithm", command=self.run)
+        self.run.grid(column=0, columnspan=2)
+
+    def create_parameter_controls(self, params, parent):
+        for param in params:
             control = None
             param_type = param.get_type()
             if param_type in [int, str, float]:
-                lab = tk.Label(self.parameter_frame, text=param.get_name())
+                lab = tk.Label(parent, text=param.get_name())
                 lab.pack()
-                control = tk.Entry(self.parameter_frame,
+                control = tk.Entry(parent,
                                    validate='all',
                                    validatecommand=(validation[param_type], '%s', '%P', '%W'),
                                    name=param.get_name(),
                                    textvar=param.get_var())
             elif param_type is bool:
-                control = tk.Checkbutton(self.parameter_frame, text=param.get_name(), name=param.get_name())
+                control = tk.Checkbutton(parent, text=param.get_name(), name=param.get_name())
 
             self.param_controls[str(control)] = control
             control.pack()
-        self.run = tk.Button(self, text="Run algorithm", command=self.run)
-        self.run.grid(column=0, columnspan=2)
 
     def run(self):
         selected_alg = self.alg_list.get(self.alg_list.curselection()[0])
         alg_parameters = [x.get_value() for x in self.alg_parameters[selected_alg]]
-        file_name = [x.get_value() for x in self.alg_parameters[selected_alg] if x.get_name() == "distribution file location"][0]
-        bounds = np.array([x.get_value() for x in self.parameters])
+
+        low = np.array([x.get_value() for x in self.lower_parameters])
+        high = np.array([x.get_value() for x in self.upper_parameters])
         print(selected_alg)
-        print(file_name)
-        norm = medianFoldNorm(file_name, polymer, fig=self.fig)
+        func, func_alg = self.function_chooser.get_function()
+
+        if func == MFC:
+            file_name = func_alg[0].get_value()
+            norm = medianFoldNorm(file_name, polymer, fig=self.fig)
+        elif func == MM:
+            file_name = func_alg[0].get_value()
+            norm = minMaxNorm(file_name, polymer, fig=self.fig)
+
+        bound = np.stack((low,high),1)
         if selected_alg == EA:
-            low = bounds - bounds/10
-            high = bounds - bounds/10
-            bound = np.stack((low,high),1)
-            pop_size = alg_parameters[1]
             iterations = alg_parameters[0]
+            pop_size = alg_parameters[1]
 
             ea = EvolutionaryAlgorithm(bound, pop_size, norm.costFunction)
             for i in range(iterations):
                 print("iteration", i)
                 f = ea.run(1)
                 self.plot_window.draw()
-                ind = ea.get_best_individual(f)
+                result = ea.get_best_individual(f)
+                self.update()
+        elif selected_alg == BO:
+            iterations = alg_parameters[0]
+            result = bayesianOptimisation(iterations, norm.costFunction, bound, 10)
 
 
-        print([x.get_value() for x in self.alg_parameters[selected_alg]])
-        print()
-        x = tk.Text(self, text=str(ind))
-        x.grid(column=0, columnspan=2)
+        # print([x.get_value() for x in self.alg_parameters[selected_alg]])
+        x = tk.Text(self, height=2)
+        x.delete(0.1, tk.END)
+        x.insert(tk.END, str(result))
+        x.grid(column=0, columnspan=2, row=3)
+
+
 
 
 class SimulationPage(tk.Frame):
@@ -237,6 +334,7 @@ class SimulationPage(tk.Frame):
             Parameter("l_naked", float, 0.5),
             Parameter("kill_spawns_new", bool, True)
         ]
+
         [x.set_var(self) for x in self.parameters]
         for param in self.parameters:
             control = None
@@ -256,7 +354,7 @@ class SimulationPage(tk.Frame):
         self.run.grid(row=1, column=0, columnspan=2)
 
     def run(self):
-        values = [x.get_value() for x in self.parameters]
+        values = [x.get_value() for x in self.lower_parameters]
         self.run["text"] = "running"
         result = polymer(*values)
         self.make_hist(result)
@@ -305,6 +403,7 @@ class ApplicationNotebook(ttk.Notebook):
 
     def __init__(self, master=None):
         super(ApplicationNotebook, self).__init__(master)
+        register_validation_functions(self)
         self.add(App(self), text="optimization")
         self.add(SimulationPage(self), text="Simulation")
         self.pack()

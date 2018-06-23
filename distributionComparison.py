@@ -48,7 +48,7 @@ class distributionComparison:
 
 		return exp_val, sim_val
 
-	def costFunction(self):
+	def costFunction(self, arguments, plot=False):
 		pass
 	# Input arguments to generate simulation results and return
 	# difference with experimental data
@@ -68,8 +68,8 @@ class distributionComparison:
 		plt.pause(1e-40)
 
 class minMaxNorm(distributionComparison) :
-	def __init__(self,file_name,simulation):
-		super().__init__(file_name, simulation)
+	def __init__(self,file_name,simulation, fig=None):
+		super().__init__(file_name, simulation, fig)
 			
 	def costFunction(self, arguments, plot=False):
 
@@ -94,7 +94,7 @@ class minMaxNorm(distributionComparison) :
 			cost = np.sum(abs(exp_norm - sim_norm)) / (exp_norm_sum / sim_norm_sum) ** 2
 
 		if plot:
-			print(arguments)
+			# print(arguments)
 			self.plotDistributions(exp_norm, sim_norm, cost)
 
 		return cost
@@ -105,7 +105,7 @@ class medianFoldNorm(distributionComparison) :
 		self.median_foldNorm=1
 
 	def costFunction(self, arguments, plot=False):
-		print(arguments)
+		# print(arguments)
 		dead, living, coupled = self.sim(*arguments)
 		exp_val, sim_val = self.preprocessDist(dead, living, coupled)
 

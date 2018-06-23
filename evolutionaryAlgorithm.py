@@ -97,7 +97,7 @@ class EvolutionaryAlgorithm:
             last_fit = fitnesses[fitnesses.shape[0] - 1,:]
         else:
             last_fit = fitnesses[row, :]
-        ind = np.agmin(last_fit)
+        ind = np.argmin(last_fit)
         return self.population[ind]
     # Evaluation of the population
     def evaluation(self):
@@ -121,7 +121,7 @@ class EvolutionaryAlgorithm:
         n = 8
         order = np.argsort(fitness)
         order = order[:n]
-        print(self.population[order[-1]])
+        # print(self.population[order[-1]])
         # self.fit_func(self.population[order[-1]])
         self.population = self.population[order]
 
