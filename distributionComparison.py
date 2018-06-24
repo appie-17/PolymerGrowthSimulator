@@ -138,43 +138,26 @@ class translationInvariant(distributionComparison):
 	def costFunction(self, arguments, plot=False):
 
 		dead, living, coupled = self.sim(*arguments)
-		sim_data = np.concatenate((dead, living, coupled))
-		sim_cl_max = sim_data.max()
-		sim_val, sim_bins = np.histogram(sim_data, bins=np.arange(sim_cl_max + 1))
+		exp_val, sim_val = self.preprocessDist(dead, living, coupled)
 
-		posmaxsim = np.where(sim_val.max())
-		posmaxexp = np.where(self.exp_val.max())
-
+		posmaxsim = np.where(sim_val == sim_val.max())
+		posmaxexp = np.where(exp_val == exp_val.max())
 		f = posmaxsim[0]-posmaxexp[0] #when negative move simulation data to the right. when positive move to the left
-		if f> 0:#move simulation data to the left
-			cutted_sim_val = sim_val[f:]
-			sim_val =[cutted_sim_val, np.zeros(f)]
-		if f<0: #move simulation data to the right
-			cutted_sim_val = sim_val[:len[sim_val]+f]
-			sim_val = [np.zeros(abs(f)), cutted_sim_val]
-
-		exp_val = self.exp_val
+		if f[0]> 0:#move simulation data to the left
+			cutted_sim_val = sim_val[f[0]:]
+			trans_sim_val = np.append(cutted_sim_val, np.zeros(f[0]))
+		if f[0]<0: #move simulation data to the right
+			cutted_sim_val = sim_val[:len(sim_val)+f[0]]
+			trans_sim_val = np.append(np.zeros(abs(f[0])), cutted_sim_val)
 
 
-		diff = int(sim_cl_max - self.exp_val.shape[0])
+		foldNorm = np.divide(exp_val, trans_sim_val, out=np.zeros(trans_sim_val.shape), where=trans_sim_val != 0)
+		median_foldNorm = np.median(foldNorm[foldNorm.nonzero()])
+		if not np.isfinite(median_foldNorm): median_foldNorm = self.median_foldNorm
+		self.median_foldNorm = median_foldNorm
 
-		# Normalize exp- and sim-data by median-fold normalization
-		if diff > 0:
-			exp_val = np.concatenate((self.exp_val, np.zeros(abs(diff))))
-			foldNorm = np.divide(exp_val, sim_val, out=np.zeros(sim_val.shape), where=sim_val != 0)
-			median_foldNorm = np.median(foldNorm[foldNorm.nonzero()])
-			if not np.isfinite(median_foldNorm): median_foldNorm = self.median_foldNorm
-			self.median_foldNorm = median_foldNorm
-			sim_norm = sim_val * median_foldNorm
-
-		elif diff <= 0:
-			sim_val = np.concatenate((sim_val, np.zeros(abs(diff))))
-			exp_val = self.exp_val
-			foldNorm = np.divide(sim_val, exp_val, out=np.zeros(exp_val.shape), where=exp_val != 0)
-			median_foldNorm = np.median(foldNorm[foldNorm.nonzero()])
-			if not np.isfinite(median_foldNorm): median_foldNorm = self.median_foldNorm
-			self.median_foldNorm = median_foldNorm
-			sim_norm = sim_val / median_foldNorm
+		trans_sim_norm = trans_sim_val * median_foldNorm
+		sim_norm = sim_val * median_foldNorm
 
 		exp_norm = exp_val
 
@@ -183,13 +166,12 @@ class translationInvariant(distributionComparison):
 		cost = 0
 		for i in range(len(self.sigma)):
 			indices = np.where((exp_norm > exp_mean - exp_sd * i) & (exp_norm < exp_mean + exp_sd * i))
-			cost += np.sum(abs((exp_norm[indices] - sim_norm[indices])) ** (1 / self.sigma[i]))
-
-		cost = cost*np.exp(abs(f/3))
+			cost += np.sum(abs((exp_norm[indices] - trans_sim_norm[indices])) ** (1 / self.sigma[i]))
 
 		if plot:
 			print(arguments)
 			self.plotDistributions(exp_norm, sim_norm, cost)
 
-		return cost[0]
-		# dead, living, coupled = [(180+99.13*x) for x in sim_data]
+		cost = cost * np.exp(abs(f))
+
+		return cost
