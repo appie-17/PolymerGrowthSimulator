@@ -4,7 +4,7 @@ import time
 
 #Set seed for 'Mersenne Twister' rng
 # np.random.seed(2)
-def polymer(time_sim, number_of_molecules, monomer_pool, p_growth, p_death, p_dead_react, l_exponent, d_exponent, l_naked, kill_spawns_new, video=0, coloured=1, final_plot=0):
+def polymer(time_sim, number_of_molecules, monomer_pool, p_growth, p_death, p_dead_react, l_exponent, d_exponent, l_naked, kill_spawns_new, video=0, coloured=1, final_plot=0, UI_vid=None):
     # this function simulates the growth of polymers it takes;
     # number_of_molecules - the number of starting chains (length 1)
     # time_sim - the number of timesteps the simulation runs for
@@ -191,6 +191,9 @@ def polymer(time_sim, number_of_molecules, monomer_pool, p_growth, p_death, p_de
 
         if video == 1:
             make_histogram(living, dead, coupled, coloured, initial_monomer_pool, monomer_pool, t)
+
+        if UI_vid is not None:
+            UI_vid((living, dead, coupled), (monomer_pool, initial_monomer_pool, t))
         # frame=getframe(gcf);
         # writeVideo(v,frame);
     distribution = [living, dead, coupled]

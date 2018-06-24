@@ -298,6 +298,7 @@ class App(tk.Frame):
         x = tk.Text(self, height=2)
         x.delete(0.1, tk.END)
         x.insert(tk.END, str(result))
+
         x.grid(column=0, columnspan=2, row=3)
 
 
@@ -307,21 +308,25 @@ class SimulationPage(tk.Frame):
 
     def __init__(self, master=None):
         super(SimulationPage, self).__init__(master)
-        self.fig = Figure()
-        self.ax = self.fig.add_subplot(111)
-        # self.ax.plot([1,2,3,4,5], [5,4,3,7,3])
         self.parameter_frame = tk.LabelFrame(self, text="parameters")
         self.build_parameters()
+
         self.result_frame = tk.LabelFrame(self, text="result")
+        self.fig = Figure()
+        self.ax = self.fig.add_subplot(111)
         self.plot_window = FigureCanvasTkAgg(self.fig, self.result_frame)
         self.plot_window.draw()
         self.plot_window.get_tk_widget().pack()
         self.pack()
-        self.result_frame.grid(column=1, row=0)
+
+        self.run = tk.Button(self, text="Run algorithm", command=self.run)
         self.parameter_frame.grid(column=0, row=0)
+        self.run.grid(column=0, row=1)
+        self.result_frame.grid(column=1, row=0, columnspan=2, rowspan=2)
 
 
     def build_parameters(self):
+        self.video = Parameter("video", bool, True)
         self.parameters  = [
             Parameter("time_sim", int, 1000),
             Parameter("number_of_molecules", int, 100000),
@@ -332,7 +337,8 @@ class SimulationPage(tk.Frame):
             Parameter("l_exponent", float, 0.5),
             Parameter("d_exponent", float, 0.5),
             Parameter("l_naked", float, 0.5),
-            Parameter("kill_spawns_new", bool, True)
+            Parameter("kill_spawns_new", bool, True),
+            self.video
         ]
 
         [x.set_var(self) for x in self.parameters]
@@ -349,27 +355,35 @@ class SimulationPage(tk.Frame):
                                    textvar=param.get_var())
             elif param_type is bool:
                 control = tk.Checkbutton(self.parameter_frame, text=param.get_name(), name=param.get_name())
+
+
             control.pack()
-        self.run = tk.Button(self, text="Run algorithm", command=self.run)
-        self.run.grid(row=1, column=0, columnspan=2)
+
+
 
     def run(self):
-        values = [x.get_value() for x in self.lower_parameters]
+        values = [x.get_value() for x in self.parameters if x.get_name() != "video"]
+
         self.run["text"] = "running"
-        result = polymer(*values)
-        self.make_hist(result)
+        self.update()
+        if self.video.get_value():
+            result = polymer(*values, UI_vid=self.make_hist)
+        else:
+            result = polymer(*values)
+            self.make_hist(result)
         self.run["text"] = "run"
-        print(result)
 
 
-    def make_hist(self, results, coloured=1):
+    def make_hist(self, results, state=None, coloured=1):
         self.ax.clear()
         living, dead,coupled = results
+        if state is not None:
+            current_monomer, initial_monomer, time = state
+            conversion = 1 - current_monomer / initial_monomer
         d = np.hstack((living, dead, coupled))
         DPn = np.mean(d)
         DPw = np.sum(np.square(d)) / (DPn * d.shape[0])
         PDI = DPw / DPn
-        #conversion = 1 - current_monomer / initial_monomer
         # dlmwrite('polymerOutput.txt',[time, conversion, DPn, DPw, PDI], '-append');
         if coloured == 0:
             self.ax.hist(d, bins=int(np.max(d) - np.min(d)), facecolor='b')
@@ -378,8 +392,6 @@ class SimulationPage(tk.Frame):
             binEdges = np.arange(np.min(d) - 0.5, np.max(d) + 0.5, step)
             midbins = binEdges[0:-1] + (binEdges[1:] - binEdges[0:-1]) / 2
             if coupled.size == 0:
-
-
                 c,b,e = self.ax.hist([dead, living], bins=midbins, histtype='barstacked', stacked=False, label=['Dead', 'Living'])
                 # e[0]["color"] = "blue"
                 # e[1]["color"] = "orange"
@@ -391,11 +403,17 @@ class SimulationPage(tk.Frame):
 
             else:
                 self.ax.hist([coupled, dead, living], bins=midbins, histtype='bar', stacked=True,
-                        label=['Terminated', 'Dead', 'Living'])
+                             label=['Terminated', 'Dead', 'Living'])
 
         self.ax.set_xlabel('Length in units')
         self.ax.set_ylabel('Frequency')
-        # ax.set_title(['conversion=', conversion, 'time=', time, 'PDI=', PDI, 'DPn=', DPn, 'DPw=', DPw])
+        digits = 3
+        if state is not None:
+            title = "conversion={}, t={}, DPI={}, DPn={}, DPw={}".format(
+                round(conversion, digits), time, round(PDI, digits),round(DPn, digits),round(DPw, digits)
+            )
+            self.ax.set_title(title)
+
         self.ax.legend()
         self.plot_window.draw()
 
