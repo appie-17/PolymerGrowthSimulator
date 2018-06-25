@@ -8,7 +8,7 @@ import sklearn.gaussian_process as gp
 from acquisitionFunction import expectedImprovement, probabilityImprovement
 
 def bayesianOptimisation(n_iters, costFunction, bounds, n_params, x0=None, n_pre_samples=5,
-                          gp_params=None, alpha=1e-5, acquisitionFunction='expected_improvement', random_search=False, epsilon=1e-7):
+                          gaussian_process=None, alpha=1e-5, acquisitionFunction='expected_improvement', random_search=False, epsilon=1e-7):
     """ bayesian_optimisation
 
     Uses Gaussian Processes to optimise the loss function `sample_loss`.
@@ -28,8 +28,8 @@ def bayesianOptimisation(n_iters, costFunction, bounds, n_params, x0=None, n_pre
             samples from the loss function.
         n_pre_samples: integer.
             If x0 is None, samples `n_pre_samples` initial points from the loss function.
-        gp_params: dictionary.
-            Dictionary of parameters to pass on to the underlying Gaussian Process.
+        gp: sklearn.gaussian_process.gpr.GaussianProcessRegressor.
+            Predefined object from GaussianProcessRegressor class that represents Gaussian process model.
         alpha: double.
             Variance of the error term of the GP.
         acquisitionFunction: string.
@@ -50,8 +50,11 @@ def bayesianOptimisation(n_iters, costFunction, bounds, n_params, x0=None, n_pre
 
     else: print('Please input acquisitionFunction \'expected improvement\'/\'probability improvement\'')
 
+
     x_list = []
     y_list = []
+    ybest_list = []
+    best_score = np.inf
 
     n_params = bounds.shape[0]
 
@@ -68,13 +71,17 @@ def bayesianOptimisation(n_iters, costFunction, bounds, n_params, x0=None, n_pre
     yp = np.array(y_list)
 
     # Create the GP
-    if gp_params is not None:
-        model = gp.GaussianProcessRegressor(**gp_params)
+
+    if gaussian_process is not None:
+        model = gaussian_process #gp.GaussianProcessRegressor(**gp_params)
+        xp = model.X_train_
+        yp = model.y_train_ + model.y_train_mean
+
     else:
         # kernel = gp.kernels.Matern(length_scale = [100,10000,10000000,1,1,1,1,1,1,1])
         # kernel = gp.kernels.Sum(gp.kernels.Matern(),gp.kernels.Matern()) 
-        kernel = gp.kernels.Matern()
-        # kernel = gp.kernels.RBF()
+        kernel = gp.kernels.Matern(length_scale=0.1)
+        # kernel = gp.kernels.RBF(length_scale=0.1)
         # kernel = gp.kernels.DotProduct(1,1)
 
         model = gp.GaussianProcessRegressor(kernel=kernel,
@@ -103,13 +110,16 @@ def bayesianOptimisation(n_iters, costFunction, bounds, n_params, x0=None, n_pre
 
         # Sample loss for new set of parameters
         cv_score = costFunction(next_sample,plot=True)
+        if cv_score < best_score:
+            best_score = cv_score
 
         # Update lists
         x_list.append(next_sample)
         y_list.append(cv_score)
+        ybest_list.append(best_score)
 
         # Update xp and yp
         xp = np.array(x_list)
         yp = np.array(y_list)
-
-    return xp, yp, model
+        ybest = np.array(ybest_list)
+    return xp, yp, ybest, model
