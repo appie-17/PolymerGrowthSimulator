@@ -10,9 +10,9 @@ from helper import processArguments
 
 if __name__ == '__main__':
     # Compare distributions after normalizing by either minMaxNorm or medianFoldNorm.
-    # compareDist =  minMaxNorm('Data/polymer_30k.xlsx', polymer)
-    #compareDist = medianFoldNorm('Data/polymer_20k.xlsx', polymer)
-    compareDist = translationInvariant('Data/polymer_20k.xlsx', polymer)
+    #compareDist =  minMaxNorm('Data/polymer_30k.xlsx', polymer)
+    compareDist = medianFoldNorm('Data/polymer_20k.xlsx', polymer)
+    #compareDist = translationInvariant('Data/polymer_20k.xlsx', polymer)
 
     param_boundaries = np.array([[900, 1100], [90000, 150000], [30000000, 100000000],
                                  [0, 1], [0, 0.0001], [0, 1], [0, 1], [0, 1], [0, 1], [1, 1]])

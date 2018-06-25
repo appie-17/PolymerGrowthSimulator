@@ -24,7 +24,8 @@ class distributionComparison:
 		self.exp_val = np.array(list(self.exp_cl_val.values()))
 		self.exp_val = np.concatenate((np.zeros(self.exp_cl_min - 1), self.exp_val))
 
-		self.sigma = [1,3,5,5,5]
+		self.sigma = [2,2,2,2,2]
+		self.transfac =2
 
 		if not fig:
 			self.fig = plt.figure(figsize=(15,5))
@@ -146,13 +147,13 @@ class translationInvariant(distributionComparison):
 		posmaxsim = np.where(sim_val == sim_val.max())
 		posmaxexp = np.where(exp_val == exp_val.max())
 		f = posmaxsim[0]-posmaxexp[0] #when negative move simulation data to the right. when positive move to the left
-		if f[0]> 0:#move simulation data to the left
+		if f[0]>= 0:#move simulation data to the left
 			cutted_sim_val = sim_val[f[0]:]
 			trans_sim_val = np.append(cutted_sim_val, np.zeros(f[0]))
 		if f[0]<0: #move simulation data to the right
 			cutted_sim_val = sim_val[:len(sim_val)+f[0]]
 			trans_sim_val = np.append(np.zeros(abs(f[0])), cutted_sim_val)
-
+		print(f[0])
 
 		foldNorm = np.divide(exp_val, trans_sim_val, out=np.zeros(trans_sim_val.shape), where=trans_sim_val != 0)
 		median_foldNorm = np.median(foldNorm[foldNorm.nonzero()])
@@ -175,6 +176,6 @@ class translationInvariant(distributionComparison):
 			print(arguments)
 			self.plotDistributions(exp_norm, sim_norm, cost)
 
-		cost = cost * np.exp(abs(f))
-
+		cost = cost * np.exp(abs(f[0]/self.transfac))
+		print(cost)
 		return cost
