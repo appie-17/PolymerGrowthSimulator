@@ -24,8 +24,7 @@ class distributionComparison:
 		self.exp_val = np.array(list(self.exp_cl_val.values()))
 		self.exp_val = np.concatenate((np.zeros(self.exp_cl_min - 1), self.exp_val))
 
-		self.sigma = [2,2,2,2,2]
-		self.transfac =2
+
 
 		if not fig:
 			self.fig = plt.figure(figsize=(15,5))
@@ -101,9 +100,10 @@ class minMaxNorm(distributionComparison) :
 		return cost
 
 class medianFoldNorm(distributionComparison) :
-	def __init__(self, file_name, simulation, fig=None):
+	def __init__(self, file_name, simulation, sigma, fig=None):
 		super().__init__(file_name, simulation, fig)
 		self.median_foldNorm=1
+		self.sigma = sigma
 
 	def costFunction(self, arguments, plot=False):
 		# print(arguments)
@@ -135,9 +135,11 @@ class medianFoldNorm(distributionComparison) :
 
 
 class translationInvariant(distributionComparison):
-	def __init__(self, file_name, simulation, fig=None):
+	def __init__(self, file_name, simulation, sigma, transfac, fig=None):
 		super().__init__(file_name, simulation, fig)
 		self.median_foldNorm = 1
+		self.sigma = sigma
+		self.transfac = transfac
 
 	def costFunction(self, arguments, plot=False):
 
@@ -173,9 +175,9 @@ class translationInvariant(distributionComparison):
 			cost += np.sum(abs((exp_norm[indices] - trans_sim_norm[indices])) ** (1 / self.sigma[i]))
 
 		if plot:
-			print(arguments)
+			# print(arguments)
 			self.plotDistributions(exp_norm, sim_norm, cost)
 
 		cost = cost * np.exp(abs(f[0]/self.transfac))
-		print(cost)
+		# print(cost)
 		return cost

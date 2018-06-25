@@ -1,10 +1,13 @@
 import tkinter as tk
 import numpy as np
 import tkinter.ttk as ttk
+import time
+import imageio
 from simulation import polymer
-from distributionComparison import medianFoldNorm, minMaxNorm
+from distributionComparison import medianFoldNorm, minMaxNorm, translationInvariant
 from evolutionaryAlgorithm import EvolutionaryAlgorithm
 from bayesianOptimization import bayesianOptimisation
+
 
 
 # CONSTANTS
@@ -75,22 +78,26 @@ def _try_cast( val, t):
 
 MFC = "MedianFoldChange"
 MM = "MaxMinNorm"
+TIMFC = "Translation invariant MFC"
 class CostFunctionChooser:
     def __init__(self, parent):
         self.parent = parent
         lf = tk.LabelFrame(parent, text="difference function")
         file_parameter = Parameter("filename", str, "Data\polymer_20k.xlsx")
         file_parameter.set_var(parent)
+        sigma_parameter = Parameter("weights", str, "1,1,1,1,1,1", parent)
+        f_parameter = Parameter("transfac", float,2.0, parent)
         self.parameters = {
-            MFC: [file_parameter],
+            MFC: [file_parameter, sigma_parameter],
+            TIMFC: [file_parameter, sigma_parameter, f_parameter],
             MM: [file_parameter]
         }
-        self.function_list = tk.Listbox(lf, height=2, exportselection=0)
-        self.functions = [MFC, MM]
+        self.function_list = tk.Listbox(lf, height=len(self.parameters), exportselection=0)
+        self.functions = [MM, MFC, TIMFC]
         [self.function_list.insert(tk.END, x) for x in self.functions]
         self.function_list.bind('<<ListboxSelect>>', self.switch)
         self.function_list.select_set(0)
-        self.function_list.pack()
+        self.function_list.pack(side=tk.BOTTOM)
         lf.pack()
 
         param_frame = tk.LabelFrame(self.parent, text="parameters")
@@ -272,10 +279,18 @@ class App(tk.Frame):
 
         if func == MFC:
             file_name = func_alg[0].get_value()
-            norm = medianFoldNorm(file_name, polymer, fig=self.fig)
+            sigma_str = func_alg[1].get_value()
+            sigma = np.array([float(x) for x in sigma_str.split(",")])
+            norm = medianFoldNorm(file_name, polymer, sigma, fig=self.fig)
         elif func == MM:
             file_name = func_alg[0].get_value()
             norm = minMaxNorm(file_name, polymer, fig=self.fig)
+        elif func == TIMFC:
+            file_name = func_alg[0].get_value()
+            sigma_str = func_alg[1].get_value()
+            sigma = np.array([float(x) for x in sigma_str.split(",")])
+            transfac = func_alg[2].get_value()
+            norm = translationInvariant(file_name, polymer, sigma, transfac, fig=self.fig)
 
         bound = np.stack((low,high),1)
         if selected_alg == EA:
@@ -325,8 +340,10 @@ class SimulationPage(tk.Frame):
         self.result_frame.grid(column=1, row=0, columnspan=2, rowspan=2)
 
 
+
     def build_parameters(self):
         self.video = Parameter("video", bool, True)
+        self.save_video = Parameter("save video", bool, True)
         self.parameters  = [
             Parameter("time_sim", int, 1000),
             Parameter("number_of_molecules", int, 100000),
@@ -338,7 +355,8 @@ class SimulationPage(tk.Frame):
             Parameter("d_exponent", float, 0.5),
             Parameter("l_naked", float, 0.5),
             Parameter("kill_spawns_new", bool, True),
-            self.video
+            self.video,
+            self.save_video
         ]
 
         [x.set_var(self) for x in self.parameters]
@@ -362,15 +380,22 @@ class SimulationPage(tk.Frame):
 
 
     def run(self):
-        values = [x.get_value() for x in self.parameters if x.get_name() != "video"]
+        values = [x.get_value() for x in self.parameters if x.get_name() not in ["video", "save video"]]
 
         self.run["text"] = "running"
         self.update()
+        if self.save_video.get_value() and self.video.get_value():
+            name = str(round(time.time()))
+            self.writer = imageio.get_writer(name + '.gif', mode='I', duration=0.3)
         if self.video.get_value():
             result = polymer(*values, UI_vid=self.make_hist)
         else:
             result = polymer(*values)
             self.make_hist(result)
+
+        if self.save_video.get_value() and self.video.get_value():
+            self.writer.close()
+
         self.run["text"] = "run"
 
 
@@ -417,6 +442,11 @@ class SimulationPage(tk.Frame):
         self.ax.legend()
         self.plot_window.draw()
 
+        if self.save_video.get_value():
+            width, height = self.plot_window.get_width_height()
+            image = np.fromstring(self.plot_window.tostring_rgb(), dtype=np.uint8).reshape((height, width, 3))
+            self.writer.append_data(image)
+
 class ApplicationNotebook(ttk.Notebook):
 
     def __init__(self, master=None):
@@ -435,6 +465,7 @@ if __name__ == '__main__':
     from matplotlib.figure import Figure
     root = tk.Tk()
     # app = App(root)
+    root.title("Optimization")
     app = ApplicationNotebook(root)
     root.mainloop()
 
