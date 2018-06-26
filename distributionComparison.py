@@ -100,10 +100,13 @@ class minMaxNorm(distributionComparison) :
 		return cost
 
 class medianFoldNorm(distributionComparison) :
-	def __init__(self, file_name, simulation, sigma, fig=None):
+	def __init__(self, file_name, simulation, sigma=None, fig=None):
 		super().__init__(file_name, simulation, fig)
 		self.median_foldNorm=1
-		self.sigma = sigma
+		if sigma is None:
+			self.sigma = [1,1,1,1,1,1]
+		else:
+			self.sigma = sigma
 
 	def costFunction(self, arguments, plot=False):
 		# print(arguments)
@@ -135,10 +138,13 @@ class medianFoldNorm(distributionComparison) :
 
 
 class translationInvariant(distributionComparison):
-	def __init__(self, file_name, simulation, sigma, transfac, fig=None):
+	def __init__(self, file_name, simulation, sigma=None, transfac=2, fig=None):
 		super().__init__(file_name, simulation, fig)
 		self.median_foldNorm = 1
-		self.sigma = sigma
+		if sigma is None:
+			self.sigma = [1,1,1,1,1,1]
+		else:
+			self.sigma = sigma
 		self.transfac = transfac
 
 	def costFunction(self, arguments, plot=False):

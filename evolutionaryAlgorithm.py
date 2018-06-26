@@ -17,7 +17,7 @@ def _async_evaluate(population, fit_func):
 
 class EvolutionaryAlgorithm:
 
-    def __init__(self, bounds, pop_size, fitness_function, clipping_function=None, graph=False):
+    def __init__(self, bounds, pop_size, fitness_function, clipping_function=None, graph=False, ui_plot=True):
         # time_sim, number_of_molecules, monomer_pool, p_growth, p_death, p_dead_react,
         # l_exponent, d_exponent, l_naked, kill_spawns_new
         init = np.random.uniform(bounds[:, 0], bounds[:, 1], (pop_size, len(bounds)))
@@ -29,6 +29,7 @@ class EvolutionaryAlgorithm:
         self.scale = scale
         self.clip_func = clipping_function
         self.graph = graph
+        self.ui_plot = ui_plot
         global p
         p = Pool(4)
         # Indicator for how verbose the EA should be 3 is print everything --> debug. and 0 is no output
@@ -88,7 +89,8 @@ class EvolutionaryAlgorithm:
             # except TclError:
             #     pass
             best = self.get_best_individual(fitnessess, i)
-            self.fit_func(best, plot=True)
+            if self.ui_plot:
+                self.fit_func(best, plot=True)
 
         return fitnessess
 
