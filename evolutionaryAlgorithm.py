@@ -17,7 +17,7 @@ def _async_evaluate(population, fit_func):
 
 class EvolutionaryAlgorithm:
 
-    def __init__(self, bounds, pop_size, fitness_function, clipping_function=None, graph=False, ui_plot=True):
+    def __init__(self, bounds, pop_size, fitness_function, clipping_function=None, graph=False, ui_plot=True, mutation_rate=0.2, n=8):
         # time_sim, number_of_molecules, monomer_pool, p_growth, p_death, p_dead_react,
         # l_exponent, d_exponent, l_naked, kill_spawns_new
         init = np.random.uniform(bounds[:, 0], bounds[:, 1], (pop_size, len(bounds)))
@@ -34,6 +34,8 @@ class EvolutionaryAlgorithm:
         p = Pool(4)
         # Indicator for how verbose the EA should be 3 is print everything --> debug. and 0 is no output
         self.log_level = 0
+        self.mutation_rate = mutation_rate
+        self.n = n
 
         # Use a argument clipping function if available
         if self.clip_func is not None:
@@ -120,9 +122,8 @@ class EvolutionaryAlgorithm:
     # Truncated ranked selection
     # TODO: Encapsulate this!
     def selection(self, fitness):
-        n = 8
         order = np.argsort(fitness)
-        order = order[:n]
+        order = order[:self.n]
         # print(self.population[order[-1]])
         # self.fit_func(self.population[order[-1]])
         self.population = self.population[order]
@@ -158,9 +159,9 @@ class EvolutionaryAlgorithm:
 
         # mutation
         # TODO Change this make the chance of evolving 0.2 for all instead of for each
-        mutation_rate = 0.2
+
         x = np.random.random(self.pop_size)
-        mask = np.argwhere(x < mutation_rate)
+        mask = np.argwhere(x < self.mutation_rate)
         cols = np.random.choice(10, len(mask), replace=True)
         mutations = np.random.normal(scale=self.scale[cols])
 

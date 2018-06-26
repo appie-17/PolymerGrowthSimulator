@@ -18,7 +18,7 @@ runs = 4
 def pop_size_experiment():
     iterations = 20
     fitnesses = []
-    sizes = [5, 10, 30]
+    sizes = [5, 10]#, 30]
     for pop in sizes:
         print("size", pop)
         run_results = []
@@ -31,24 +31,52 @@ def pop_size_experiment():
 
     return sizes, fitnesses
 
-
-
-def iter_experiment():
+def mutation_experiment():
+    iterations = 20
     fitnesses = []
-    iterations = [10, 20, 40, 50, 100]
-    for iteration in iterations:
-        print("iteration", iteration)
+    mutation_rates = [0.2, 0.4, 0.6]
+    for mutation_rate in mutation_rates:
+        print("mutation rate", mutation_rate)
         run_results = []
         for run in range(runs):
-            ea = EvolutionaryAlgorithm(bounds, 20, MFC.costFunction, ui_plot=False)
-            fit = ea.run(iteration)
-            #average over iterations
+            ea = EvolutionaryAlgorithm(bounds, 10, MFC.costFunction, ui_plot=False, mutation_rate=mutation_rate)
+            fit = ea.run(iterations)
             run_results.append(np.mean(fit, 1))
-        # average over runs
         stacked = np.stack(run_results)
         fitnesses.append(np.mean(stacked, 0))
 
-    return iterations, fitnesses
+    return sizes, fitnesses
+
+def N_experiment():
+    iterations = 20
+    fitnesses = []
+    N = [2, 4, 8]
+    for n in N:
+        print("n", n)
+        run_results = []
+        for run in range(runs):
+            ea = EvolutionaryAlgorithm(bounds, 10, MFC.costFunction, ui_plot=False, n=n)
+            fit = ea.run(iterations)
+            run_results.append(np.mean(fit, 1))
+        stacked = np.stack(run_results)
+        fitnesses.append(np.mean(stacked, 0))
+
+    return sizes, fitnesses
+
+def iter_experiment():
+    fitnesses = []
+    iteration = 100
+    run_results = []
+    for run in range(runs):
+        ea = EvolutionaryAlgorithm(bounds, 20, MFC.costFunction, ui_plot=False)
+        fit = ea.run(iteration)
+        #average over iterations
+        run_results.append(np.mean(fit, 1))
+    # average over runs
+    stacked = np.stack(run_results)
+    fitnesses.append(np.mean(stacked, 0))
+
+    return iteration, fitnesses
 
 
 if __name__ == '__main__':
@@ -58,3 +86,9 @@ if __name__ == '__main__':
 
     sizes, results = pop_size_experiment()
     np.savetxt("size_experiment.csv", results, delimiter=",")
+
+    # n_s, n_result = N_experiment()
+    # np.savetxt("N_experiment.csv", n_result, delimiter=",")
+
+    # rates, mutation_result = mutation_experiment()
+    # np.savetxt("mutation_experiment", mutation_result, delimiter=",")
