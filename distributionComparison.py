@@ -138,7 +138,7 @@ class medianFoldNorm(distributionComparison) :
 
 
 class translationInvariant(distributionComparison):
-	def __init__(self, file_name, simulation, sigma=None, transfac=2, fig=None):
+	def __init__(self, file_name, simulation, sigma=None, transfac=1, fig=None):
 		super().__init__(file_name, simulation, fig)
 		self.median_foldNorm = 1
 		if sigma is None:
@@ -154,6 +154,7 @@ class translationInvariant(distributionComparison):
 
 		posmaxsim = np.where(sim_val == sim_val.max())
 		posmaxexp = np.where(exp_val == exp_val.max())
+		percentage = abs((posmaxsim[0]/posmaxexp[0])-1) #measure relative distance of the peaks
 		f = posmaxsim[0]-posmaxexp[0] #when negative move simulation data to the right. when positive move to the left
 		if f[0]>= 0:#move simulation data to the left
 			cutted_sim_val = sim_val[f[0]:]
@@ -183,7 +184,7 @@ class translationInvariant(distributionComparison):
 		if plot:
 			# print(arguments)
 			self.plotDistributions(exp_norm, sim_norm, cost)
-
-		cost = cost * np.exp(abs(f[0]/self.transfac))
-		# print(cost)
+		print(percentage)
+		cost = cost * np.exp(percentage/self.transfac)
+		print(cost)
 		return cost
