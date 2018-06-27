@@ -7,9 +7,7 @@ import numpy as np
 import sklearn.gaussian_process as gp
 from acquisitionFunction import expectedImprovement, probabilityImprovement
 
-def bayesianOptimisation(n_iters, costFunction, bounds, n_params, x0=None, n_pre_samples=5,
-                          gaussian_process=None, alpha=1e-5, acquisitionFunction='expected_improvement', random_search=False, epsilon=1e-7):
-    """ bayesian_optimisation
+""" bayesianOptimisation
 
     Uses Gaussian Processes to optimise the loss function `sample_loss`.
 
@@ -41,6 +39,10 @@ def bayesianOptimisation(n_iters, costFunction, bounds, n_params, x0=None, n_pre
         epsilon: double.
             Precision tolerance for floats.
     """
+
+
+def bayesianOptimisation(n_iters, costFunction, bounds, n_params, x0=None, n_pre_samples=5,
+                          gaussian_process=None, alpha=1e-5, acquisitionFunction='expected_improvement', random_search=False, epsilon=1e-7):
 
     if acquisitionFunction == 'expected_improvement':
         acquisition = expectedImprovement(n_params)
@@ -74,8 +76,9 @@ def bayesianOptimisation(n_iters, costFunction, bounds, n_params, x0=None, n_pre
 
     if gaussian_process is not None:
         model = gaussian_process #gp.GaussianProcessRegressor(**gp_params)
-        xp = model.X_train_
-        yp = model.y_train_ + model.y_train_mean
+        if 'X_train_' in dir(gp):
+            xp = model.X_train_
+            yp = model.y_train_ + model.y_train_mean
 
     else:
         # kernel = gp.kernels.Matern(length_scale = [100,10000,10000000,1,1,1,1,1,1,1])
@@ -123,3 +126,6 @@ def bayesianOptimisation(n_iters, costFunction, bounds, n_params, x0=None, n_pre
         yp = np.array(y_list)
         ybest = np.array(ybest_list)
     return xp, yp, ybest, model
+
+if __name__ == '__main__':
+    pass
