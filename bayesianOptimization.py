@@ -41,7 +41,7 @@ from acquisitionFunction import expectedImprovement, probabilityImprovement
     """
 
 
-def bayesianOptimisation(n_iters, costFunction, bounds, n_params, x0=None, n_pre_samples=5,
+def bayesianOptimisation(n_iters, costFunction, bounds, n_params, x0=None, n_pre_samples=10,
                           gaussian_process=None, alpha=1e-5, acquisitionFunction='expected_improvement', random_search=False, epsilon=1e-7):
 
     if acquisitionFunction == 'expected_improvement':
@@ -83,7 +83,7 @@ def bayesianOptimisation(n_iters, costFunction, bounds, n_params, x0=None, n_pre
     else:
         # kernel = gp.kernels.Matern(length_scale = [100,10000,10000000,1,1,1,1,1,1,1])
         # kernel = gp.kernels.Sum(gp.kernels.Matern(),gp.kernels.Matern()) 
-        kernel = gp.kernels.Matern(length_scale=0.1)
+        kernel = gp.kernels.Matern(length_scale=1.0)
         # kernel = gp.kernels.RBF(length_scale=0.1)
         # kernel = gp.kernels.DotProduct(1,1)
 
