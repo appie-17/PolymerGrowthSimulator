@@ -115,7 +115,7 @@ class medianFoldNorm(distributionComparison) :
 		super().__init__(file_name, simulation, fig)
 		self.median_foldNorm=1
 		if sigma is None:
-			self.sigma = [1,1,1,1,1,1]
+			self.sigma = [1,5,5,5,5,5]
 		else:
 			self.sigma = sigma
 

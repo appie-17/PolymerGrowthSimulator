@@ -30,6 +30,7 @@ class EvolutionaryAlgorithm:
         self.clip_func = clipping_function
         self.graph = graph
         self.ui_plot = ui_plot
+        self.best = None
         global p
         p = Pool(4)
         # Indicator for how verbose the EA should be 3 is print everything --> debug. and 0 is no output
@@ -73,6 +74,7 @@ class EvolutionaryAlgorithm:
             # Evaluate individuals and store fitness values
             fitness = self.evaluation()
             fitnessess[i] = fitness
+            self.save_best(fitness)
             self.selection(fitness)
             self.reproduction()
             self.mutation()
@@ -95,6 +97,27 @@ class EvolutionaryAlgorithm:
                 self.fit_func(best, plot=True)
 
         return fitnessess
+
+    def save_best(self, fitness):
+        # get current best
+        ind = np.argmin(fitness)
+        best = fitness[ind]
+        best_params = self.population[ind]
+        # see if it is better than the overall best
+        replace = False
+        if self.best is not None:
+            # replace if necessary
+            if best < self.best["fitness"]:
+                replace = True
+        else:
+            replace = True
+
+        if replace:
+            self.best = {"fitness": best, "ind": np.copy(best_params)}
+
+
+    def get_ultimate_best(self):
+        return self.best
 
     def get_best_individual(self, fitnesses, row=None):
         if row is None:
