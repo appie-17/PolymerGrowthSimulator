@@ -62,6 +62,7 @@ class acquisitionFunction:
 						   x0=starting_point.reshape(1, -1),
 						   bounds=bounds,
 						   method='L-BFGS-B',
+                           # method = 'BFGS',
 						   args=(gp, previous_costs))
 
 			if res.fun < best_acquisition_value:
@@ -72,16 +73,13 @@ class acquisitionFunction:
 
 
 class expectedImprovement(acquisitionFunction):
-	def __init__(self, n_params,greater_is_better=False):
+	def __init__(self, n_params):
 		super().__init__(n_params)
 
 
 	def sampleFunction(self, x_predict, gp, previous_costs):
 		x_predict = x_predict.reshape(-1, self.n_params)
 		mu, sigma = gp.predict(x_predict, return_std=True)
-
-		if self.greater_is_better:
-			optimum_cost = np.max(previous_costs)
 
 		if self.greater_is_better:
 			optimum_cost = np.max(previous_costs)
@@ -92,8 +90,8 @@ class expectedImprovement(acquisitionFunction):
 
 		# In case sigma equals zero
 		with np.errstate(divide='ignore'):
-			Z = scaling_factor * (mu - optimum_cost) / sigma
-			expected_improvement = scaling_factor * (mu - optimum_cost) * norm.cdf(Z) + sigma * norm.pdf(Z)
+			Z = scaling_factor * (mu - optimum_cost-0.01) / sigma
+			expected_improvement = scaling_factor * (mu - optimum_cost-0.01) * norm.cdf(Z) + sigma * norm.pdf(Z)
 			expected_improvement[sigma == 0.0] == 0.0
 		return -1 * expected_improvement
 
@@ -104,7 +102,7 @@ class probabilityImprovement(acquisitionFunction):
 
 	def sampleFunction(self, x_predict, gp, previous_costs):
 
-		eps=1
+		eps=.01
 		x_predict = x_predict.reshape(-1, self.n_params)
 
 		mu, sigma = gp.predict(x_predict, return_std=True)
@@ -115,9 +113,11 @@ class probabilityImprovement(acquisitionFunction):
 			loss_optimum = np.min(previous_costs)
 
 		scaling_factor = (-1) ** (not self.greater_is_better)
+
+
 		with np.errstate(divide='ignore'):
-			probability_improvement = scaling_factor * norm.cdf((mu-loss_optimum-eps)/
-				sigma)
+			Z = scaling_factor * (mu - loss_optimum - 0.01) / sigma
+			probability_improvement = norm.cdf(Z)
 			probability_improvement[sigma == 0.0] == 0.0
 
-		return probability_improvement
+		return -1 * probability_improvement

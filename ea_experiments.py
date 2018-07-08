@@ -2,6 +2,7 @@ from distributionComparison import medianFoldNorm, translationInvariant
 from simulation import polymer
 import numpy as np
 from evolutionaryAlgorithm import EvolutionaryAlgorithm
+import matplotlib.pyplot as plt
 
 
 file_name = "Data\polymer_20k.xlsx"
@@ -18,7 +19,8 @@ runs = 4
 def pop_size_experiment():
     iterations = 20
     fitnesses = []
-    sizes = [5, 10]#, 30]
+    sizes = [5]#, 10]#,
+    # sizes = [30]
     for pop in sizes:
         print("size", pop)
         run_results = []
@@ -26,8 +28,8 @@ def pop_size_experiment():
             ea = EvolutionaryAlgorithm(bounds, pop, MFC.costFunction, ui_plot=False)
             fit = ea.run(iterations)
             run_results.append(np.mean(fit, 1))
-        stacked = np.stack(run_results)
-        fitnesses.append(np.mean(stacked, 0))
+        stacked = np.stack(run_results,1)
+        fitnesses.append(np.mean(stacked, 1))
 
     return sizes, fitnesses
 
@@ -81,12 +83,12 @@ def iter_experiment():
 
 
 if __name__ == '__main__':
-    iterations, res = iter_experiment()
+    pass
+    # iterations, res = iter_experiment()
+    # np.savetxt("iteration_experiment.csv", res, delimiter=",")
 
-    np.savetxt("iteration_experiment.csv", res, delimiter=",")
-
-    # sizes, results = pop_size_experiment()
-    # np.savetxt("size_experiment.csv", results, delimiter=",")
+    sizes, results = pop_size_experiment()
+    np.savetxt("size_experiment_5.csv", results, delimiter=",")
 
     # n_s, n_result = N_experiment()
     # np.savetxt("N_experiment.csv", n_result, delimiter=",")

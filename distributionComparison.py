@@ -18,11 +18,22 @@ class distributionComparison:
 		self.exp_molmass = self.exp_df[self.exp_df.columns[0]].values
 		self.exp_values = self.exp_df[self.exp_df.columns[1]].values
 		self.exp_chainlen = ((self.exp_molmass-180) / 99.13).astype(int)
-		self.exp_cl_min = self.exp_chainlen.min()
-		self.exp_cl_val = dict(zip(self.exp_chainlen, self.exp_values))
-		self.exp_cl_val.update(zip(np.arange(1, self.exp_cl_min + 1), np.zeros(self.exp_cl_min)))
+		self.cl_max = self.exp_chainlen[-1]
+		self.exp_cl_val = dict(zip(
+			np.arange(self.cl_max),
+			np.zeros(self.cl_max)))
+		for cl in self.exp_cl_val:
+			ind = np.where(cl==self.exp_chainlen)
+			if not len(ind[0])==0:
+				self.exp_cl_val[cl] = self.exp_values[ind[0][0]]		
+		
+		for cl in self.exp_cl_val.keys():
+			if (self.exp_cl_val[cl]==0) & (cl!=0):				
+				
+				self.exp_cl_val[cl] = self.exp_cl_val[cl-1]				
+
 		self.exp_val = np.array(list(self.exp_cl_val.values()))
-		self.exp_val = np.concatenate((np.zeros(self.exp_cl_min - 1), self.exp_val))
+		
 
 
 
@@ -132,13 +143,12 @@ class medianFoldNorm(distributionComparison) :
 		if plot:
 			# print(arguments)
 			self.plotDistributions(exp_norm, sim_norm, cost)
-
 		return cost
 
 
 
 class translationInvariant(distributionComparison):
-	def __init__(self, file_name, simulation, sigma=None, transfac=2, fig=None):
+	def __init__(self, file_name, simulation, sigma=None, transfac=1, fig=None):
 		super().__init__(file_name, simulation, fig)
 		self.median_foldNorm = 1
 		if sigma is None:
@@ -154,6 +164,7 @@ class translationInvariant(distributionComparison):
 
 		posmaxsim = np.where(sim_val == sim_val.max())
 		posmaxexp = np.where(exp_val == exp_val.max())
+		percentage = abs((posmaxsim[0]/posmaxexp[0])-1) #measure relative distance of the peaks
 		f = posmaxsim[0]-posmaxexp[0] #when negative move simulation data to the right. when positive move to the left
 		if f[0]>= 0:#move simulation data to the left
 			cutted_sim_val = sim_val[f[0]:]
@@ -183,7 +194,7 @@ class translationInvariant(distributionComparison):
 		if plot:
 			# print(arguments)
 			self.plotDistributions(exp_norm, sim_norm, cost)
-
-		cost = cost * np.exp(abs(f[0]/self.transfac))
-		# print(cost)
+		print(percentage)
+		cost = cost * np.exp(percentage/self.transfac)
+		print(cost)
 		return cost
